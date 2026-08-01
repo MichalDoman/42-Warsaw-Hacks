@@ -140,13 +140,14 @@
                 </article>
 
                 <article class="panel glass-panel returning-panel">
-                    <p class="eyebrow">RETURNING SIGNALS</p>
-                    <h2>Who is back?</h2>
+                    <p class="eyebrow">WALLET SIGNALS</p>
+                    <h2>Top 3 richest students</h2>
                     <div class="returning-list">
-                        {% for login in dashboard.returning_users %}
+                        {% for user in dashboard.richest_users %}
                         <div class="returning-user">
-                            <div class="small-avatar">{{ login[0] | upper }}</div>
-                            <span>{{ login }}</span>
+                            <div class="small-avatar">{{ user.login[0] | upper }}</div>
+                            <span>{{ user.login }}</span>
+                            <strong>{{ user.wallet }}</strong>
                         </div>
                         {% endfor %}
                     </div>

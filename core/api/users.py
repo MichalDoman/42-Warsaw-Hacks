@@ -194,7 +194,7 @@ def get_top_3_richest_users(
         users,
         key=lambda user: user.wallet,
         reverse=True,
-    )[:4]
+    )[:3]
 
 
 def get_active_warsaw_user_ids(

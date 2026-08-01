@@ -3,8 +3,10 @@ from flask import Flask, jsonify, render_template
 
 from core.api.api_client import get_access_token, load_credentials
 from core.api.users import (
+    get_all_users,
     get_all_coalition_users,
     get_all_locations,
+    get_top_3_richest_users,
     segregate_locations_by_coalition,
 )
 
@@ -30,6 +32,10 @@ def load_coalition_presence() -> dict[str, int]:
 
 def get_dashboard_data() -> dict:
     coalition_counts = load_coalition_presence()
+    client_id, client_secret = load_credentials()
+    access_token = get_access_token(client_id, client_secret)
+    all_users = get_all_users(access_token)
+    richest_users = get_top_3_richest_users(all_users)
     known_coalitions = {
         name: count
         for name, count in coalition_counts.items()
@@ -47,6 +53,13 @@ def get_dashboard_data() -> dict:
         "coalition_counts": coalition_counts,
         "leading_coalition": leading_coalition,
         "leading_count": leading_count,
+        "richest_users": [
+            {
+                "login": user.login,
+                "wallet": user.wallet,
+            }
+            for user in richest_users
+        ],
         "projects": [
             {"login": "natalia", "project": "minishell", "score": 110},
             {"login": "student42", "project": "push_swap", "score": 100},
