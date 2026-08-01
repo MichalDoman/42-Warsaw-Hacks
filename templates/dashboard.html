@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>42 Warsaw Pulse</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<main class="dashboard">
+    <header class="dashboard-header">
+        <h1>42 Warsaw Pulse</h1>
+        <div class="header-line"></div>
+        <button id="refreshButton" class="refresh-button" type="button">Refresh</button>
+    </header>
+
+    {% if error_message %}
+        <section class="error-message">{{ error_message }}</section>
+    {% endif %}
+
+    {% if dashboard %}
+    <section class="dashboard-layout">
+        <aside class="left-column">
+            <article class="card activity-card coalition-{{ dashboard.leading_coalition }}">
+                <div class="activity-icon">☀️</div>
+                <div>
+                    <p class="activity-title">Highly active</p>
+                    <p class="activity-description">
+                        Most students today were from
+                        <strong>{{ dashboard.leading_coalition | capitalize }}</strong>
+                    </p>
+                    <p class="activity-value">{{ dashboard.leading_count }} people</p>
+                </div>
+            </article>
+
+            <article class="card info-card">
+                <p class="info-title">🌧️ Evaluation wave</p>
+                <p class="info-text">{{ dashboard.evaluation_count }} evaluations completed today</p>
+            </article>
+
+            <article class="card info-card">
+                <p class="info-title">🔥 Cosmic science research</p>
+                <p class="info-text">{{ dashboard.top_project }} is currently the most active project</p>
+            </article>
+
+            <article class="card info-card">
+                <p class="info-title">Campus activity</p>
+                <p class="info-text">Live information from the Warsaw campus.</p>
+            </article>
+        </aside>
+
+        <section class="center-column">
+            <article class="panel projects-panel">
+                <div class="panel-header">
+                    <h2>Projects completed this week</h2>
+                    <span>•••</span>
+                </div>
+                <div class="projects-list">
+                    {% for project in dashboard.projects %}
+                    <div class="project-item">
+                        <div class="avatar">{{ project.login[0] | upper }}</div>
+                        <p class="project-login">{{ project.login }}</p>
+                        <p class="project-name">{{ project.project }}</p>
+                        <p class="project-score">{{ project.score }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </article>
+
+            <article class="panel xp-panel">
+                <h2>XP activity</h2>
+                <div class="chart-wrapper"><canvas id="xpChart"></canvas></div>
+            </article>
+
+            <section class="bottom-grid">
+                <article class="panel presence-panel">
+                    <h2>Coalition presence</h2>
+                    {% for coalition, count in dashboard.coalition_counts.items() %}
+                        {% if coalition != "unknown" %}
+                        <div class="presence-row">
+                            <span>{{ coalition | capitalize }}</span>
+                            <div class="presence-track">
+                                <div class="presence-bar bar-{{ coalition }}" style="width: {{ count }}%;"></div>
+                            </div>
+                            <strong>{{ count }}</strong>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </article>
+
+                <article class="panel returning-panel">
+                    <h2>Who is back?</h2>
+                    <div class="returning-list">
+                        {% for login in dashboard.returning_users %}
+                        <div class="returning-user">
+                            <div class="small-avatar">{{ login[0] | upper }}</div>
+                            <span>{{ login }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </article>
+            </section>
+        </section>
+
+        <aside class="right-column">
+            <article class="panel coalition-panel">
+                <h2>Coalition activity</h2>
+                <div class="coalition-chart-wrapper"><canvas id="coalitionChart"></canvas></div>
+                <div class="coalition-values">
+                    {% for coalition, count in dashboard.coalition_counts.items() %}
+                        {% if coalition != "unknown" %}
+                        <div class="coalition-value-row">
+                            <span>{{ coalition | capitalize }}</span>
+                            <strong>{{ count }}</strong>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </article>
+        </aside>
+    </section>
+
+    <script>
+        window.dashboardData = {
+            xpValues: {{ dashboard.xp_values | tojson }},
+            coalitionCounts: {{ dashboard.coalition_counts | tojson }}
+        };
+    </script>
+    {% endif %}
+</main>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
