@@ -44,3 +44,23 @@ def get_access_token(client_id: str, client_secret: str) -> str:
 
     return access_token
 
+
+def get_request(
+    url: str,
+    access_token: str,
+    params: dict[str, Any] | None = None,
+) -> Any:
+    response = requests.get(
+        url,
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Accept": "application/json",
+        },
+        params=params,
+        timeout=40,
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+
