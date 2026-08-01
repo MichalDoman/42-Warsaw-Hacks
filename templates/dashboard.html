@@ -8,11 +8,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<div class="space-layer stars-small"></div>
+<div class="space-layer stars-large"></div>
+
 <main class="dashboard">
-    <header class="dashboard-header">
-        <h1>42 Warsaw Pulse</h1>
+    <header class="dashboard-header glass-panel">
+        <div class="brand-mark">42</div>
+        <div>
+            <p class="eyebrow">WARSAW CAMPUS · LIVE MISSION CONTROL</p>
+            <h1>42 Warsaw Pulse</h1>
+        </div>
         <div class="header-line"></div>
-        <button id="refreshButton" class="refresh-button" type="button">Refresh</button>
+        <button id="refreshButton" class="refresh-button" type="button">↻ Refresh</button>
     </header>
 
     {% if error_message %}
@@ -22,60 +29,103 @@
     {% if dashboard %}
     <section class="dashboard-layout">
         <aside class="left-column">
-            <article class="card activity-card coalition-{{ dashboard.leading_coalition }}">
-                <div class="activity-icon">☀️</div>
-                <div>
-                    <p class="activity-title">Highly active</p>
-                    <p class="activity-description">
-                        Most students today were from
-                        <strong>{{ dashboard.leading_coalition | capitalize }}</strong>
-                    </p>
-                    <p class="activity-value">{{ dashboard.leading_count }} people</p>
+            <article class="mission-panel glass-panel">
+                <div class="mission-panel-heading">
+                    <div>
+                        <p class="eyebrow">CAMPUS SIGNALS</p>
+                        <h2>Today in orbit</h2>
+                    </div>
+                    <span class="live-badge"><i></i> LIVE</span>
                 </div>
-            </article>
 
-            <article class="card info-card">
-                <p class="info-title">🌧️ Evaluation wave</p>
-                <p class="info-text">{{ dashboard.evaluation_count }} evaluations completed today</p>
-            </article>
+                <section class="activity-hero coalition-{{ dashboard.leading_coalition }}">
+                    <div class="planet-icon">☀</div>
+                    <div>
+                        <p class="activity-title">Highly active</p>
+                        <p class="activity-description">
+                            Most students today were from
+                            <strong>{{ dashboard.leading_coalition | capitalize }}</strong>
+                        </p>
+                        <p class="activity-value">{{ dashboard.leading_count }} people</p>
+                    </div>
+                </section>
 
-            <article class="card info-card">
-                <p class="info-title">🔥 Cosmic science research</p>
-                <p class="info-text">{{ dashboard.top_project }} is currently the most active project</p>
-            </article>
+                <div class="signal-list">
+                    <section class="signal-item">
+                        <div class="signal-icon violet">☄</div>
+                        <div>
+                            <p class="signal-label">Evaluation wave</p>
+                            <p class="signal-value">{{ dashboard.evaluation_count }} evaluations completed today</p>
+                        </div>
+                    </section>
 
-            <article class="card info-card">
-                <p class="info-title">Campus activity</p>
-                <p class="info-text">Live information from the Warsaw campus.</p>
+                    <section class="signal-item">
+                        <div class="signal-icon orange">✦</div>
+                        <div>
+                            <p class="signal-label">Cosmic science research</p>
+                            <p class="signal-value"><strong>{{ dashboard.top_project }}</strong> is currently the most active project</p>
+                        </div>
+                    </section>
+
+                    <section class="signal-item campus-signal">
+                        <div class="signal-icon cyan">⌁</div>
+                        <div>
+                            <p class="signal-label">Campus activity</p>
+                            <p class="signal-value">Live information from the Warsaw campus.</p>
+                        </div>
+                        <div class="orbit-decoration" aria-hidden="true">
+                            <span class="orbit orbit-one"></span>
+                            <span class="orbit orbit-two"></span>
+                            <span class="orbit-core"></span>
+                        </div>
+                    </section>
+                </div>
             </article>
         </aside>
 
         <section class="center-column">
-            <article class="panel projects-panel">
+            <article class="panel glass-panel projects-panel">
                 <div class="panel-header">
-                    <h2>Projects completed this week</h2>
-                    <span>•••</span>
+                    <div>
+                        <p class="eyebrow">RECENT MISSIONS</p>
+                        <h2>Projects completed this week</h2>
+                    </div>
+                    <span class="panel-menu">•••</span>
                 </div>
                 <div class="projects-list">
                     {% for project in dashboard.projects %}
                     <div class="project-item">
-                        <div class="avatar">{{ project.login[0] | upper }}</div>
+                        <div class="avatar-wrap">
+                            <div class="avatar">{{ project.login[0] | upper }}</div>
+                            <span class="avatar-orbit"></span>
+                        </div>
                         <p class="project-login">{{ project.login }}</p>
                         <p class="project-name">{{ project.project }}</p>
-                        <p class="project-score">{{ project.score }}</p>
+                        <p class="project-score">{{ project.score }} XP</p>
                     </div>
                     {% endfor %}
                 </div>
             </article>
 
-            <article class="panel xp-panel">
-                <h2>XP activity</h2>
+            <article class="panel glass-panel xp-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">ENERGY CURVE</p>
+                        <h2>XP activity</h2>
+                    </div>
+                    <span class="metric-chip">7 DAYS</span>
+                </div>
                 <div class="chart-wrapper"><canvas id="xpChart"></canvas></div>
             </article>
 
             <section class="bottom-grid">
-                <article class="panel presence-panel">
-                    <h2>Coalition presence</h2>
+                <article class="panel glass-panel presence-panel">
+                    <div class="panel-header">
+                        <div>
+                            <p class="eyebrow">CREW DISTRIBUTION</p>
+                            <h2>Coalition presence</h2>
+                        </div>
+                    </div>
                     {% for coalition, count in dashboard.coalition_counts.items() %}
                         {% if coalition != "unknown" %}
                         <div class="presence-row">
@@ -89,7 +139,8 @@
                     {% endfor %}
                 </article>
 
-                <article class="panel returning-panel">
+                <article class="panel glass-panel returning-panel">
+                    <p class="eyebrow">RETURNING SIGNALS</p>
                     <h2>Who is back?</h2>
                     <div class="returning-list">
                         {% for login in dashboard.returning_users %}
@@ -104,14 +155,19 @@
         </section>
 
         <aside class="right-column">
-            <article class="panel coalition-panel">
-                <h2>Coalition activity</h2>
+            <article class="panel glass-panel coalition-panel">
+                <div class="panel-header">
+                    <div>
+                        <p class="eyebrow">ORBITAL BALANCE</p>
+                        <h2>Coalition activity</h2>
+                    </div>
+                </div>
                 <div class="coalition-chart-wrapper"><canvas id="coalitionChart"></canvas></div>
                 <div class="coalition-values">
                     {% for coalition, count in dashboard.coalition_counts.items() %}
                         {% if coalition != "unknown" %}
-                        <div class="coalition-value-row">
-                            <span>{{ coalition | capitalize }}</span>
+                        <div class="coalition-value-row coalition-row-{{ coalition }}">
+                            <span><i></i>{{ coalition | capitalize }}</span>
                             <strong>{{ count }}</strong>
                         </div>
                         {% endif %}

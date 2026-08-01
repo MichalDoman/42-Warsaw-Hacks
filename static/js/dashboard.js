@@ -1,9 +1,9 @@
 const dashboardData = window.dashboardData ?? { xpValues: [], coalitionCounts: {} };
 
 const coalitionColors = {
-    orionis: "#9068d8",
-    lunaria: "#74c9ec",
-    unitterax: "#f1cf4f",
+    orionis: "#a970ff",
+    lunaria: "#5cd6ff",
+    unitterax: "#ffd84d",
 };
 
 const xpCanvas = document.getElementById("xpChart");
@@ -15,19 +15,45 @@ if (xpCanvas && typeof Chart !== "undefined") {
             datasets: [{
                 label: "XP activity",
                 data: dashboardData.xpValues,
-                borderColor: "#27344a",
-                backgroundColor: "rgba(39, 52, 74, 0.08)",
+                borderColor: "#5cd6ff",
+                backgroundColor: "rgba(92, 214, 255, 0.09)",
                 borderWidth: 3,
-                tension: 0.4,
+                tension: 0.42,
                 fill: true,
                 pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: "#0b1025",
+                pointBorderColor: "#a970ff",
+                pointBorderWidth: 2,
             }],
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { x: { grid: { display: false } }, y: { beginAtZero: true } },
+            interaction: { intersect: false, mode: "index" },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: "rgba(11, 16, 37, 0.96)",
+                    borderColor: "rgba(92, 214, 255, 0.3)",
+                    borderWidth: 1,
+                    titleColor: "#ffffff",
+                    bodyColor: "#c7d3f5",
+                },
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: "#7f8db7" },
+                    border: { color: "rgba(255,255,255,0.07)" },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: "rgba(255,255,255,0.055)" },
+                    ticks: { color: "#7f8db7" },
+                    border: { display: false },
+                },
+            },
         },
     });
 }
@@ -46,15 +72,33 @@ if (coalitionCanvas && typeof Chart !== "undefined") {
             datasets: [{
                 data: values,
                 backgroundColor: labels.map((coalition) => coalitionColors[coalition]),
-                borderColor: "#ffffff",
-                borderWidth: 5,
+                borderColor: "#0b1025",
+                borderWidth: 7,
+                hoverOffset: 8,
             }],
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: "62%",
-            plugins: { legend: { position: "bottom", labels: { usePointStyle: true, padding: 18 } } },
+            cutout: "66%",
+            plugins: {
+                legend: {
+                    position: "bottom",
+                    labels: {
+                        color: "#aeb9db",
+                        usePointStyle: true,
+                        pointStyle: "circle",
+                        padding: 18,
+                    },
+                },
+                tooltip: {
+                    backgroundColor: "rgba(11, 16, 37, 0.96)",
+                    borderColor: "rgba(157, 184, 255, 0.25)",
+                    borderWidth: 1,
+                    titleColor: "#ffffff",
+                    bodyColor: "#c7d3f5",
+                },
+            },
         },
     });
 }
