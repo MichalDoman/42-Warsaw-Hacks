@@ -8,7 +8,7 @@ import requests
 from core.settings import COALITIONS_IDS
 from core.api.api_client import load_credentials, get_access_token
 from core.api.coalitions import get_coalition_by_id, get_coalition_users
-from core.api.users import get_active_users, get_warsaw_locations
+from core.api.users import get_active_users, get_users_logged_in_today, get_finished_projects_this_week
 
 
 def main() -> None:
@@ -35,8 +35,11 @@ def main() -> None:
         # for item in lunaria_active_users:
         #     print(item)
 
-        warsaw_campus_locations = get_warsaw_locations(access_token)
-        print(warsaw_campus_locations)
+        # users_logged_in_today = get_users_logged_in_today(access_token)
+        # print(users_logged_in_today)
+
+        finished_projects_this_week = get_finished_projects_this_week(access_token)
+        print(finished_projects_this_week)
 
     except requests.Timeout:
         print("42 API response timeout.")
