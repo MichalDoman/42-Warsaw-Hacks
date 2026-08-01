@@ -6,7 +6,7 @@ import requests
 
 from core.api.api_client import load_credentials, get_access_token
 from core.api.coalitions import get_coalition_by_id, get_coalition_users
-from core.api.users import get_all_coalition_users, get_all_users, filter_users_logged_in_today, get_top_3_richest_users, get_all_locations, segregate_locations_by_coalition
+from core.api.users import *
 
 
 def main() -> None:
@@ -14,25 +14,40 @@ def main() -> None:
         client_id, client_secret = load_credentials()
         access_token = get_access_token(client_id, client_secret)
 
-        all_users = get_all_users(access_token)
-        # print(all_users)
-        # print()
+        # all_users = get_all_users(access_token)
 
         # users_logged_in_today = filter_users_logged_in_today(all_users)
         # print(users_logged_in_today)
 
         # print(get_top_3_richest_users(all_users))
 
-        users = get_all_coalition_users(access_token)
-        segregated_logged_in = segregate_locations_by_coalition(
-            get_all_locations(access_token),
-            users
-        )
+        # users = get_all_coalition_users(access_token)
+        # segregated_logged_in = segregate_locations_by_coalition(
+        #     get_all_locations(access_token),
+        #     users
+        # )
 
-        print(f"orionis: {len(segregated_logged_in["orionis"])}")
-        print(f"lunaria: {len(segregated_logged_in["lunaria"])}")
-        print(f"unitterax: {len(segregated_logged_in["unitterax"])}")
-        print(f"unknown: {len(segregated_logged_in["unknown"])}")
+        # print(f"orionis: {len(segregated_logged_in["orionis"])}")
+        # print(f"lunaria: {len(segregated_logged_in["lunaria"])}")
+        # print(f"unitterax: {len(segregated_logged_in["unitterax"])}")
+        # print(f"unknown: {len(segregated_logged_in["unknown"])}")
+
+        users = get_all_users(access_token)
+
+        warsaw_user_ids: set[int] = {
+            user.id
+            for user in users
+        }
+
+        projects_users = get_projects_users(access_token)
+
+        warsaw_projects = create_projects_for_warsaw_users(
+            projects_users=projects_users,
+            warsaw_user_ids=warsaw_user_ids,
+        )
+        for project in get_latest_projects(warsaw_projects):
+            print(project)
+            print()
 
 
     except requests.Timeout:
