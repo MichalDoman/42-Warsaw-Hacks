@@ -85,8 +85,8 @@ def get_all_users(
             url=f"{API_BASE_URL}/campus/{WARSAW_CAMPUS_ID}/users",
             access_token=access_token,
             params={
-                "page[number]": 1,
-                "page[size]": 100,
+                "page[number]": page_number,
+                "page[size]": page_size,
                 "filter[kind]": "student",
                 "filter[staff?]": False
             },
