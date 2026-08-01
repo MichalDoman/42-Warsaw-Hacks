@@ -1,14 +1,12 @@
 import os
 import sys
-import time
 from typing import Any
 
 import requests
 
-from core.settings import COALITIONS_IDS
 from core.api.api_client import load_credentials, get_access_token
 from core.api.coalitions import get_coalition_by_id, get_coalition_users
-from core.api.users import get_active_users, get_users_logged_in_today, get_finished_projects_this_week
+from core.api.users import get_all_coalition_users, get_all_users, filter_users_logged_in_today, get_top_3_richest_users, get_all_locations, segregate_locations_by_coalition
 
 
 def main() -> None:
@@ -16,30 +14,26 @@ def main() -> None:
         client_id, client_secret = load_credentials()
         access_token = get_access_token(client_id, client_secret)
 
-        # orionis = get_coalition_by_id(access_token, COALITIONS_IDS["orionis"])
-        # time.sleep(1)
-        # lunaria = get_coalition_by_id(access_token, COALITIONS_IDS["lunaria"])
-        # time.sleep(1)
-        # unitterax = get_coalition_by_id(access_token, COALITIONS_IDS["unitterax"])
-        # time.sleep(1)
-
-        # print(orionis)
-        # print(lunaria)
-        # print(unitterax)
+        all_users = get_all_users(access_token)
+        # print(all_users)
         # print()
 
-        # lunaria_users = get_coalition_users(access_token, COALITIONS_IDS["lunaria"])
-        # print(lunaria_users)
-
-        # lunaria_active_users = get_active_users(access_token, COALITIONS_IDS["lunaria"])
-        # for item in lunaria_active_users:
-        #     print(item)
-
-        # users_logged_in_today = get_users_logged_in_today(access_token)
+        # users_logged_in_today = filter_users_logged_in_today(all_users)
         # print(users_logged_in_today)
 
-        finished_projects_this_week = get_finished_projects_this_week(access_token)
-        print(finished_projects_this_week)
+        # print(get_top_3_richest_users(all_users))
+
+        users = get_all_coalition_users(access_token)
+        segregated_logged_in = segregate_locations_by_coalition(
+            get_all_locations(access_token),
+            users
+        )
+
+        print(f"orionis: {len(segregated_logged_in["orionis"])}")
+        print(f"lunaria: {len(segregated_logged_in["lunaria"])}")
+        print(f"unitterax: {len(segregated_logged_in["unitterax"])}")
+        print(f"unknown: {len(segregated_logged_in["unknown"])}")
+
 
     except requests.Timeout:
         print("42 API response timeout.")
