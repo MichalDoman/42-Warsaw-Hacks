@@ -22,6 +22,6 @@ class Project:
 	id: int
 	user_id: int
 	name: str
-	final_mark: int | None
+	final_mark: int
 	closed_at: str
 	status: str

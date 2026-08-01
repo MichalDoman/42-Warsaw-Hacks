@@ -2,13 +2,12 @@ import requests
 from flask import Flask, jsonify, render_template
 
 from core.api.api_client import get_access_token, load_credentials
-from core.api.users import (
-    get_all_users,
-    get_all_coalition_users,
-    get_all_locations,
-    get_top_3_richest_users,
-    segregate_locations_by_coalition,
-)
+from core.api.coalitions import get_all_coalition_users
+from core.api.projects import get_projects_users
+from core.api.locations import get_all_locations, segregate_locations_by_coalition
+from core.api.users import get_all_users
+from core.services.users_stats import get_top_3_richest_users
+
 
 app = Flask(__name__)
 

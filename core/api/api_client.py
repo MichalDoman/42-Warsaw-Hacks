@@ -5,7 +5,7 @@ from typing import Any
 import requests
 from dotenv import load_dotenv
 
-from core.settings import TOKEN_URL, API_BASE_URL
+from core.settings import TOKEN_URL
 
 
 def load_credentials() -> tuple[str, str]:
