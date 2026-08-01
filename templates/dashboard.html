@@ -96,7 +96,12 @@
                     {% for project in dashboard.projects %}
                     <div class="project-item">
                         <div class="avatar-wrap">
-                            <div class="avatar">{{ project.login[0] | upper }}</div>
+                            <img
+                                class="avatar"
+                                src="{{ project.img_link }}"
+                                alt="{{ project.login }}"
+                                loading="lazy"
+                            >
                             <span class="avatar-orbit"></span>
                         </div>
                         <p class="project-login">{{ project.login }}</p>

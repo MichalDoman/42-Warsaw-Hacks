@@ -62,9 +62,6 @@ def filter_users_logged_in_today(
     return result
 
 
-from typing import Any
-
-
 def segregate_locations_by_coalition(
     locations: list[Location],
     coalition_users: dict[str, list[dict[str, Any]]],
