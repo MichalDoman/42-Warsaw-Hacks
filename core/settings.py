@@ -10,5 +10,5 @@ WARSAW_CAMPUS_ID = 67
 COALITIONS_IDS = {
 	"orionis": 458,
 	"lunaria": 459,
-	"unitterax": 460
+	"uniterrax": 460
 }

@@ -2008,3 +2008,33 @@ button { font: inherit; }
     font-size: 22px;
     font-weight: 900;
 }
+.coalition-ranking-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 34px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.coalition-ranking-row > span:not(.ranking-divider) {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.coalition-ranking-row strong {
+    font-size: 14px;
+}
+
+.ranking-label {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.ranking-divider {
+    color: rgba(255, 255, 255, 0.18);
+}

@@ -958,52 +958,22 @@
                                             </strong>
                                         </div>
 
-                                        <div class="coalition-stat-row">
-                                            <div>
-                                                <span class="stat-label">
-                                                    Top 10 members
-                                                </span>
+                                        <div class="coalition-stat-row coalition-ranking-row">
+                                            <span>
+                                                <span class="ranking-label">Top 3</span>
+                                                <strong>
+                                                    {{ "{:,}".format(coalition.top_3_score) }}
+                                                </strong>
+                                            </span>
 
-                                                <small>
-                                                    Combined score
-                                                </small>
-                                            </div>
+                                            <span class="ranking-divider">|</span>
 
-                                            <strong>
-                                                {{ "{:,}".format(coalition.top_10_score) }}
-                                            </strong>
-                                        </div>
-
-                                        <div class="coalition-stat-row">
-                                            <div>
-                                                <span class="stat-label">
-                                                    Top 3 members
-                                                </span>
-
-                                                <small>
-                                                    Combined score
-                                                </small>
-                                            </div>
-
-                                            <strong>
-                                                {{ "{:,}".format(coalition.top_3_score) }}
-                                            </strong>
-                                        </div>
-
-                                        <div class="coalition-stat-row">
-                                            <div>
-                                                <span class="stat-label">
-                                                    Logged in today
-                                                </span>
-
-                                                <small>
-                                                    Unique campus presence
-                                                </small>
-                                            </div>
-
-                                            <strong>
-                                                {{ coalition.logged_in_today }}
-                                            </strong>
+                                            <span>
+                                                <span class="ranking-label">Top 10</span>
+                                                <strong>
+                                                    {{ "{:,}".format(coalition.top_10_score) }}
+                                                </strong>
+                                            </span>
                                         </div>
                                     </div>
                                 </section>

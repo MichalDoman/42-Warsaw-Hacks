@@ -79,10 +79,6 @@ def build_coalition_statistics(
             "image_url": coalition.image_url,
             "color": coalition.color,
             "total_score": coalition.score,
-            "logged_in_today": coalition_counts.get(
-                slug,
-                0,
-            ),
             "active_students": metrics.get(
                 "active_students",
                 0,
@@ -184,6 +180,7 @@ def _load_dashboard_data() -> dict[str, Any]:
 
     coalition_metrics = build_coalition_metrics(
         all_coalition_users=coalition_users,
+        users=all_users,
     )
 
     coalition_statistics = build_coalition_statistics(

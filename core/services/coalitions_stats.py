@@ -1,6 +1,6 @@
 from typing import Any
 
-from core.data_types import Location
+from core.data_types import Location, User
 
 
 def count_unique_users_by_coalition(
@@ -52,16 +52,33 @@ def get_leading_coalition(
     )
 
 
+def get_coalition_user_ids(
+    coalition_users: list[dict[str, Any]],
+) -> set[int]:
+    user_ids: set[int] = set()
+
+    for coalition_user in coalition_users:
+        user_data = coalition_user.get("user") or {}
+        user_id = user_data.get("id")
+
+        if user_id is None:
+            continue
+
+        user_ids.add(int(user_id))
+
+    return user_ids
+
+
 def get_active_students_count(
     coalition_users: list[dict[str, Any]],
+    active_student_ids: set[int],
 ) -> int:
-    """
-    Count active students in a coalition.
-    """
-    return sum(
-        1
-        for coalition_user in coalition_users
-        if (coalition_user.get("user") or {}).get("active?") is True
+    coalition_user_ids = get_coalition_user_ids(
+        coalition_users
+    )
+
+    return len(
+        coalition_user_ids & active_student_ids
     )
 
 
@@ -138,17 +155,27 @@ def get_top_3_score_sum(
 
 
 def build_coalition_metrics(
-    all_coalition_users: dict[str, list[dict[str, Any]]],
+    all_coalition_users: dict[
+        str,
+        list[dict[str, Any]],
+    ],
+    users: list[User],
 ) -> dict[str, dict[str, int | float]]:
-    """
-    Build statistics for every coalition.
-    """
+    active_student_ids = {
+        user.id
+        for user in users
+        if user.is_active
+    }
+
     result: dict[str, dict[str, int | float]] = {}
 
-    for coalition_name, coalition_users in all_coalition_users.items():
+    for coalition_name, coalition_users in (
+        all_coalition_users.items()
+    ):
         result[coalition_name] = {
             "active_students": get_active_students_count(
-                coalition_users
+                coalition_users=coalition_users,
+                active_student_ids=active_student_ids,
             ),
             "average_score": get_average_score_per_user(
                 coalition_users
