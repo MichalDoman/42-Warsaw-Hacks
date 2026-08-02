@@ -513,12 +513,6 @@ button { font: inherit; }
 .signal-icon.cyan { background: rgba(77,231,255,.13); color: #84f2ff; }
 .signal-label { margin: 0 0 6px; font-weight: 800; }
 .signal-value { margin: 0; color: var(--muted); line-height: 1.45; }
-.campus-signal { min-height: 160px; align-items: flex-start; }
-.orbit-decoration { position: absolute; right: 8px; bottom: 4px; width: 118px; height: 118px; opacity: .55; }
-.orbit { position: absolute; inset: 18px; border: 1px solid rgba(92,214,255,.28); border-radius: 50%; transform: rotate(26deg); }
-.orbit-two { inset: 33px 9px; border-color: rgba(169,112,255,.34); transform: rotate(-28deg); }
-.orbit-core { position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; transform: translate(-50%, -50%); border-radius: 50%; background: var(--cyan); box-shadow: 0 0 28px rgba(77,231,255,.7); }
-
 .projects-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 25px; }
 .project-item { min-width: 0; text-align: center; }
 .avatar-wrap { position: relative; width: 78px; height: 78px; margin: 0 auto 12px; }
@@ -1511,6 +1505,341 @@ button { font: inherit; }
     }
 }
 
+.rocket-fuel-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 160px;
+    overflow: hidden;
+    padding: 22px;
+    border-color: rgba(80, 224, 255, 0.28);
+    background:
+        radial-gradient(
+            circle at 13% 52%,
+            rgba(71, 215, 255, 0.18),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 95% 20%,
+            rgba(167, 102, 255, 0.13),
+            transparent 33%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(23, 89, 120, 0.28),
+            rgba(29, 24, 66, 0.76)
+        );
+    box-shadow:
+        inset 0 0 32px rgba(66, 211, 255, 0.06);
+}
+
+.rocket-fuel-card::before {
+    content: "";
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    right: -95px;
+    bottom: -103px;
+    border: 1px solid rgba(92, 214, 255, 0.15);
+    border-radius: 50%;
+    box-shadow:
+        0 0 40px rgba(92, 214, 255, 0.08);
+}
+
+.rocket-fuel-visual {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 92px;
+    height: 100px;
+}
+
+.rocket-body {
+    position: relative;
+    z-index: 4;
+    width: 36px;
+    height: 62px;
+    border: 2px solid rgba(228, 250, 255, 0.9);
+    border-radius: 50% 50% 30% 30%;
+    background:
+        linear-gradient(
+            160deg,
+            #f5fdff 0%,
+            #a9eaff 42%,
+            #6a96df 100%
+        );
+    box-shadow:
+        0 0 12px rgba(190, 242, 255, 0.8),
+        0 0 28px rgba(83, 210, 255, 0.45);
+    transform: rotate(18deg);
+    animation:
+        rocket-floating 2.5s ease-in-out infinite;
+}
+
+.rocket-window {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 13px;
+    height: 13px;
+    transform: translateX(-50%);
+    border: 2px solid rgba(255, 255, 255, 0.88);
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #e7ffff,
+            #4cd3ff 58%,
+            #3265aa
+        );
+    box-shadow:
+        0 0 8px rgba(70, 220, 255, 0.85);
+}
+
+.rocket-wing {
+    position: absolute;
+    bottom: 4px;
+    width: 15px;
+    height: 25px;
+    background:
+        linear-gradient(
+            to bottom,
+            #b983ff,
+            #7043c7
+        );
+}
+
+.rocket-wing-left {
+    left: -11px;
+    border-radius: 80% 0 20% 80%;
+    transform: rotate(-15deg);
+}
+
+.rocket-wing-right {
+    right: -11px;
+    border-radius: 0 80% 80% 20%;
+    transform: rotate(15deg);
+}
+
+.rocket-flame {
+    position: absolute;
+    left: 50%;
+    bottom: -28px;
+    width: 15px;
+    height: 31px;
+    transform: translateX(-50%);
+    border-radius: 50% 50% 70% 70%;
+    background:
+        linear-gradient(
+            to bottom,
+            #fff6a8,
+            #ffba4d 35%,
+            #ff6b46 68%,
+            transparent
+        );
+    filter:
+        drop-shadow(
+            0 0 8px rgba(255, 177, 66, 0.9)
+        );
+    animation:
+        rocket-flame-pulse 0.8s ease-in-out infinite;
+}
+
+.rocket-orbit {
+    position: absolute;
+    z-index: 2;
+    width: 88px;
+    height: 33px;
+    border: 1px solid rgba(110, 225, 255, 0.52);
+    border-radius: 50%;
+    transform: rotate(-18deg);
+    animation:
+        rocket-orbit-spin 9s linear infinite;
+}
+
+.rocket-orbit::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    width: 7px;
+    height: 7px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #bbf6ff;
+    box-shadow:
+        0 0 8px #ffffff,
+        0 0 17px rgba(92, 214, 255, 0.9);
+}
+
+.rocket-fuel-star {
+    position: absolute;
+    z-index: 5;
+    color: #ffffff;
+    text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.96),
+        0 0 18px rgba(92, 214, 255, 0.8);
+}
+
+.rocket-fuel-star-one {
+    top: 3px;
+    right: 2px;
+    font-size: 17px;
+    animation:
+        rocket-star-pulse 1.8s ease-in-out infinite;
+}
+
+.rocket-fuel-star-two {
+    left: 3px;
+    bottom: 5px;
+    color: #d4a6ff;
+    font-size: 13px;
+    animation:
+        rocket-star-pulse 2.2s ease-in-out 0.4s infinite;
+}
+
+.rocket-fuel-content {
+    position: relative;
+    z-index: 3;
+    min-width: 0;
+    flex: 1;
+}
+
+.rocket-fuel-label {
+    margin: 0 0 6px;
+    color: #78e7ff;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.19em;
+}
+
+.rocket-fuel-value {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(30px, 3vw, 40px);
+    font-weight: 950;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-shadow:
+        0 0 13px rgba(92, 214, 255, 0.45),
+        0 0 28px rgba(116, 104, 255, 0.2);
+}
+
+.rocket-fuel-value span {
+    color: #ffd86b;
+    font-size: 0.68em;
+    text-shadow:
+        0 0 12px rgba(255, 216, 107, 0.55);
+}
+
+.rocket-fuel-description {
+    margin: 10px 0 0;
+    color: #a9b5da;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.rocket-fuel-gauge {
+    position: absolute;
+    right: 19px;
+    bottom: 17px;
+    z-index: 3;
+    width: 74px;
+    height: 5px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.rocket-fuel-gauge-fill {
+    display: block;
+    width: 78%;
+    height: 100%;
+    border-radius: inherit;
+    background:
+        linear-gradient(
+            to right,
+            #57dfff,
+            #ad79ff,
+            #ffd85e
+        );
+    box-shadow:
+        0 0 9px rgba(92, 214, 255, 0.6);
+    animation:
+        rocket-gauge-glow 2s ease-in-out infinite;
+}
+
+@keyframes rocket-floating {
+    0%,
+    100% {
+        transform:
+            rotate(18deg)
+            translateY(2px);
+    }
+
+    50% {
+        transform:
+            rotate(18deg)
+            translateY(-5px);
+    }
+}
+
+@keyframes rocket-flame-pulse {
+    0%,
+    100% {
+        opacity: 0.72;
+        transform:
+            translateX(-50%)
+            scaleY(0.84);
+    }
+
+    50% {
+        opacity: 1;
+        transform:
+            translateX(-50%)
+            scaleY(1.14);
+    }
+}
+
+@keyframes rocket-orbit-spin {
+    from {
+        transform: rotate(-18deg);
+    }
+
+    to {
+        transform: rotate(342deg);
+    }
+}
+
+@keyframes rocket-star-pulse {
+    0%,
+    100% {
+        opacity: 0.42;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.24);
+    }
+}
+
+@keyframes rocket-gauge-glow {
+    0%,
+    100% {
+        opacity: 0.65;
+        filter: brightness(0.9);
+    }
+
+    50% {
+        opacity: 1;
+        filter: brightness(1.2);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .animated-star,
     .first-orbit,
@@ -1519,7 +1848,12 @@ button { font: inherit; }
     .sunray-core,
     .sunray-glow,
     .sunray-orbit,
-    .sunray-star {
+    .sunray-star,
+    .rocket-body,
+    .rocket-flame,
+    .rocket-orbit,
+    .rocket-fuel-star,
+    .rocket-fuel-gauge-fill {
         animation: none;
     }
 }

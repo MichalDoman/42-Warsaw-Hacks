@@ -28,6 +28,7 @@ from core.services.projects_stats import (
 from core.services.users_stats import (
     get_first_login_after_sunrise,
     get_first_login_today,
+    get_today_explorers_wallet,
     get_top_3_richest_users,
 )
 from core.services.locations_stats import (
@@ -160,6 +161,11 @@ def _load_dashboard_data() -> dict[str, Any]:
         users=all_users,
     )
 
+    rocket_fuel = get_today_explorers_wallet(
+        locations=today_locations,
+        users=all_users,
+    )
+
     all_projects = create_projects_for_warsaw_users(
         users=all_users,
         access_token=access_token,
@@ -201,6 +207,7 @@ def _load_dashboard_data() -> dict[str, Any]:
         "first_login": first_login,
         "first_sunray": first_sunray,
         "mission_streak": mission_streak,
+        "rocket_fuel": rocket_fuel,
         "hourly_login_activity": hourly_login_activity,
         "hour_labels": build_hour_labels(),
         "peak_login_hour": peak_login_hour,

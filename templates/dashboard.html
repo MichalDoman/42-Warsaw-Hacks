@@ -550,43 +550,52 @@
                                 {% endif %}
                             </section>
 
-                            <!-- CAMPUS ACTIVITY -->
-                            <section
-                                class="
-                                    signal-item
-                                    campus-signal
-                                "
-                            >
-                                <div class="signal-icon cyan">
-                                    ⌁
+                            <!-- ROCKET FUEL -->
+                            <section class="signal-item rocket-fuel-card">
+                                <div
+                                    class="rocket-fuel-visual"
+                                    aria-hidden="true"
+                                >
+                                    <span class="rocket-body">
+                                        <span class="rocket-window"></span>
+                                        <span class="rocket-wing rocket-wing-left"></span>
+                                        <span class="rocket-wing rocket-wing-right"></span>
+                                        <span class="rocket-flame"></span>
+                                    </span>
+
+                                    <span class="rocket-orbit"></span>
+
+                                    <span class="rocket-fuel-star rocket-fuel-star-one">
+                                        ✦
+                                    </span>
+
+                                    <span class="rocket-fuel-star rocket-fuel-star-two">
+                                        ✧
+                                    </span>
                                 </div>
 
-                                <div>
-                                    <p class="signal-label">
-                                        Campus activity
+                                <div class="rocket-fuel-content">
+                                    <p class="rocket-fuel-label">
+                                        ROCKET FUEL
                                     </p>
 
-                                    <p class="signal-value">
-                                        Live information from the
-                                        Warsaw campus.
+                                    <p class="rocket-fuel-value">
+                                        {{ "{:,}".format(dashboard.rocket_fuel) }}
+                                        <span>₳</span>
+                                    </p>
+
+                                    <p class="rocket-fuel-description">
+                                        Total wallet power
+                                        <br>
+                                        of today’s explorers
                                     </p>
                                 </div>
 
                                 <div
-                                    class="orbit-decoration"
+                                    class="rocket-fuel-gauge"
                                     aria-hidden="true"
                                 >
-                                    <span
-                                        class="orbit orbit-one"
-                                    ></span>
-
-                                    <span
-                                        class="orbit orbit-two"
-                                    ></span>
-
-                                    <span
-                                        class="orbit-core"
-                                    ></span>
+                                    <span class="rocket-fuel-gauge-fill"></span>
                                 </div>
                             </section>
                         </div>

@@ -129,3 +129,23 @@ def get_first_login_after_sunrise(
         ),
         "location": first_location.location,
     }
+
+
+def get_today_explorers_wallet(
+    locations: list[Location],
+    users: list[User],
+) -> int:
+    """
+    Return the total wallet balance of all unique users
+    who logged in today.
+    """
+    active_user_ids = {
+        location.user_id
+        for location in locations
+    }
+
+    return sum(
+        user.wallet
+        for user in users
+        if user.id in active_user_ids
+    )
