@@ -43,11 +43,11 @@ def get_all_coalition_users(
     access_token: str,
 ) -> Dict[str, List[Dict[str, Any]]]:
     orionis = get_coalition_users(access_token, COALITIONS_IDS["orionis"])
-    time.sleep(1)
+    #time.sleep(1)
     lunaria = get_coalition_users(access_token, COALITIONS_IDS["lunaria"])
-    time.sleep(1)
+    #time.sleep(1)
     unitterax = get_coalition_users(access_token, COALITIONS_IDS["unitterax"])
-    time.sleep(1)
+    #time.sleep(1)
 
     return {
         "orionis": orionis,

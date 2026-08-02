@@ -69,6 +69,7 @@ def create_project(
     final_mark = project_user.get("final_mark")
     marked_at = project_user.get("marked_at")
     status = project_user.get("status")
+    validated = project_user.get("validated?")
 
     if (
         user_id is None
@@ -89,6 +90,7 @@ def create_project(
         ),
         closed_at=str(marked_at),
         status=str(status or ""),
+        validated=bool(validated),
     )
 
 

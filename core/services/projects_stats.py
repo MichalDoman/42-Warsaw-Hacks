@@ -1,9 +1,12 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from core.data_types import Project, User
+from core.settings import WARSAW_TIMEZONE
 
 
-def parse_project_date(project: Project) -> datetime:
+def parse_project_date(
+    project: Project,
+) -> datetime:
     return datetime.fromisoformat(
         project.closed_at.replace("Z", "+00:00")
     )
@@ -16,8 +19,7 @@ def get_latest_projects(
     passed_projects = [
         project
         for project in projects
-        if project.final_mark is not None
-        and project.final_mark >= 100
+        if project.validated
     ]
 
     return sorted(
@@ -58,3 +60,40 @@ def get_latest_projects_data(
         })
 
     return result
+
+
+def get_project_local_date(
+    project: Project,
+):
+    return (
+        parse_project_date(project)
+        .astimezone(WARSAW_TIMEZONE)
+        .date()
+    )
+
+
+def get_mission_streak(
+    projects: list[Project],
+) -> int:
+    """
+    Count consecutive successful projects.
+
+    Rules:
+    - Every validated project adds 1 to the streak.
+    - Every failed project resets the streak to 0.
+    - Projects are processed chronologically.
+    """
+    sorted_projects = sorted(
+        projects,
+        key=parse_project_date,
+    )
+
+    streak = 0
+
+    for project in sorted_projects:
+        if project.validated:
+            streak += 1
+        else:
+            streak = 0
+
+    return streak

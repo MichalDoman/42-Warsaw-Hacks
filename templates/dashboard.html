@@ -2,195 +2,890 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>42 Warsaw Pulse</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
-<div class="space-layer stars-small"></div>
-<div class="space-layer stars-large"></div>
+    <div class="space-layer stars-small"></div>
+    <div class="space-layer stars-large"></div>
 
-<main class="dashboard">
-    <header class="dashboard-header glass-panel">
-        <div class="brand-mark">42</div>
-        <div>
-            <p class="eyebrow">WARSAW CAMPUS · LIVE MISSION CONTROL</p>
-            <h1>42 Warsaw Pulse</h1>
-        </div>
-        <div class="header-line"></div>
-        <button id="refreshButton" class="refresh-button" type="button">↻ Refresh</button>
-    </header>
+    <main class="dashboard">
+        <header class="dashboard-header glass-panel">
+            <div class="brand-mark">
+                42
+            </div>
 
-    {% if error_message %}
-        <section class="error-message">{{ error_message }}</section>
-    {% endif %}
+            <div>
+                <p class="eyebrow">
+                    WARSAW CAMPUS · LIVE MISSION CONTROL
+                </p>
 
-    {% if dashboard %}
-    <section class="dashboard-layout">
-        <aside class="left-column">
-            <article class="mission-panel glass-panel">
-                <div class="mission-panel-heading">
-                    <div>
-                        <p class="eyebrow">CAMPUS SIGNALS</p>
-                        <h2>Today in orbit</h2>
-                    </div>
-                    <span class="live-badge"><i></i> LIVE</span>
-                </div>
+                <h1>
+                    42 Warsaw Pulse
+                </h1>
+            </div>
 
-                <section class="activity-hero coalition-{{ dashboard.leading_coalition }}">
-                    <div class="planet-icon">☀</div>
-                    <div>
-                        <p class="activity-title">Highly active</p>
-                        <p class="activity-description">
-                            Most students today were from
-                            <strong>{{ dashboard.leading_coalition | capitalize }}</strong>
-                        </p>
-                        <p class="activity-value">{{ dashboard.leading_count }} people</p>
-                    </div>
+            <div class="header-line"></div>
+
+            <button
+                id="refreshButton"
+                class="refresh-button"
+                type="button"
+            >
+                ↻ Refresh
+            </button>
+        </header>
+
+        {% if error_message %}
+            <section class="error-message">
+                {{ error_message }}
+            </section>
+        {% endif %}
+
+        {% if dashboard %}
+            <section class="dashboard-layout">
+
+                <!-- LEFT COLUMN -->
+                <aside class="left-column">
+                    <article class="mission-panel glass-panel">
+                        <div class="mission-panel-heading">
+                            <div>
+                                <p class="eyebrow">
+                                    CAMPUS SIGNALS
+                                </p>
+
+                                <h2>
+                                    Today in orbit
+                                </h2>
+                            </div>
+
+                            <span class="live-badge">
+                                <i></i>
+                                LIVE
+                            </span>
+                        </div>
+
+                        <!-- LEADING COALITION -->
+                        <section
+                            class="
+                                activity-hero
+                                coalition-{{ dashboard.leading_coalition }}
+                            "
+                        >
+                            <div class="planet-icon">
+                                ☀
+                            </div>
+
+                            <div>
+                                {% if dashboard.leading_count > 0 %}
+                                    <p class="activity-title">
+                                        Highly active
+                                    </p>
+
+                                    <p class="activity-description">
+                                        Most students who logged in today
+                                        were from
+
+                                        <strong>
+                                            {{
+                                                dashboard.leading_coalition
+                                                | capitalize
+                                            }}
+                                        </strong>
+                                    </p>
+
+                                    <p class="activity-value">
+                                        {{ dashboard.leading_count }}
+
+                                        {% if dashboard.leading_count == 1 %}
+                                            person
+                                        {% else %}
+                                            people
+                                        {% endif %}
+                                    </p>
+                                {% else %}
+                                    <p class="activity-title">
+                                        No activity yet
+                                    </p>
+
+                                    <p class="activity-description">
+                                        No coalition members have logged
+                                        in today.
+                                    </p>
+
+                                    <p class="activity-value">
+                                        0 people
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </section>
+
+                        <div class="signal-list">
+
+                            <!-- FIRST STAR -->
+                            <section class="signal-item first-star-card">
+                                {% if dashboard.first_login %}
+                                    <div class="first-star-visual">
+                                        <span
+                                            class="
+                                                animated-star
+                                                star-one
+                                            "
+                                            aria-hidden="true"
+                                        >
+                                            ✦
+                                        </span>
+
+                                        <span
+                                            class="
+                                                animated-star
+                                                star-two
+                                            "
+                                            aria-hidden="true"
+                                        >
+                                            ✧
+                                        </span>
+
+                                        <div
+                                            class="
+                                                first-star-avatar-system
+                                            "
+                                        >
+                                            <span
+                                                class="
+                                                    avatar-orbit
+                                                    first-orbit
+                                                "
+                                                aria-hidden="true"
+                                            ></span>
+
+                                            <span
+                                                class="
+                                                    avatar-orbit
+                                                    second-orbit
+                                                "
+                                                aria-hidden="true"
+                                            ></span>
+
+                                            <img
+                                                class="first-star-avatar"
+                                                src="{{
+                                                    dashboard
+                                                    .first_login
+                                                    .img_link
+                                                }}"
+                                                alt="{{
+                                                    dashboard
+                                                    .first_login
+                                                    .login
+                                                }}"
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div class="first-star-content">
+                                        <div class="first-star-heading">
+                                            <div>
+                                                <p class="first-star-label">
+                                                    THE FIRST STAR!
+                                                </p>
+
+                                                <h3>
+                                                    {{
+                                                        dashboard
+                                                        .first_login
+                                                        .login
+                                                    }}
+                                                </h3>
+                                            </div>
+
+                                            <time
+                                                class="first-star-time"
+                                                datetime="{{
+                                                    dashboard
+                                                    .first_login
+                                                    .time
+                                                }}"
+                                            >
+                                                {{
+                                                    dashboard
+                                                    .first_login
+                                                    .time
+                                                }}
+                                            </time>
+                                        </div>
+
+                                        <p class="first-star-message">
+                                            First signal received
+                                        </p>
+
+                                        {% if dashboard.first_login.location %}
+                                            <p class="first-star-terminal">
+                                                Terminal
+
+                                                <strong>
+                                                    {{
+                                                        dashboard
+                                                        .first_login
+                                                        .location
+                                                    }}
+                                                </strong>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div
+                                        class="first-star-empty-icon"
+                                        aria-hidden="true"
+                                    >
+                                        ✦
+                                    </div>
+
+                                    <div class="first-star-content">
+                                        <p class="first-star-label">
+                                            THE FIRST STAR!
+                                        </p>
+
+                                        <h3>
+                                            Waiting for a signal
+                                        </h3>
+
+                                        <p class="first-star-message">
+                                            No student has logged in
+                                            today yet.
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            </section>
+
+                            <!-- MISSION STREAK -->
+                            <section
+                                class="
+                                    signal-item
+                                    mission-streak-card
+                                "
+                            >
+                                <div
+                                    class="streak-planet"
+                                    aria-hidden="true"
+                                >
+                                    <span
+                                        class="streak-planet-core"
+                                    ></span>
+
+                                    <span
+                                        class="
+                                            streak-ring
+                                            streak-ring-one
+                                        "
+                                    ></span>
+
+                                    <span
+                                        class="
+                                            streak-ring
+                                            streak-ring-two
+                                        "
+                                    ></span>
+
+                                    <span class="streak-star">
+                                        ✦
+                                    </span>
+                                </div>
+
+                                <div class="mission-streak-content">
+                                    <p class="mission-streak-label">
+                                        MISSION STREAK
+                                    </p>
+
+                                    {% if dashboard.mission_streak > 0 %}
+                                        <div class="mission-streak-main">
+                                            <span
+                                                class="
+                                                    mission-streak-value
+                                                "
+                                            >
+                                                {{
+                                                    dashboard
+                                                    .mission_streak
+                                                }}
+                                            </span>
+
+                                            <span
+                                                class="
+                                                    mission-streak-title
+                                                "
+                                            >
+                                                {% if
+                                                    dashboard.mission_streak
+                                                    == 1
+                                                %}
+                                                    successful project
+                                                    in a row
+                                                {% else %}
+                                                    successful projects
+                                                    in a row
+                                                {% endif %}
+                                            </span>
+                                        </div>
+
+                                        <p
+                                            class="
+                                                mission-streak-description
+                                            "
+                                        >
+                                            Validation streak is active
+                                        </p>
+                                    {% else %}
+                                        <div class="mission-streak-main">
+                                            <span
+                                                class="
+                                                    mission-streak-value
+                                                "
+                                            >
+                                                0
+                                            </span>
+
+                                            <span
+                                                class="
+                                                    mission-streak-title
+                                                "
+                                            >
+                                                Mission interrupted
+                                            </span>
+                                        </div>
+
+                                        <p
+                                            class="
+                                                mission-streak-description
+                                            "
+                                        >
+                                            The latest project was not
+                                            validated
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                                <div
+                                    class="streak-energy"
+                                    aria-hidden="true"
+                                >
+                                    {% for number in range(7) %}
+                                        <span
+                                            class="
+                                                streak-energy-dot
+
+                                                {% if
+                                                    number
+                                                    <
+                                                    dashboard
+                                                    .mission_streak
+                                                %}
+                                                    streak-energy-active
+                                                {% endif %}
+                                            "
+                                        ></span>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <!-- EVALUATIONS -->
+                            <section class="signal-item">
+                                <div class="signal-icon violet">
+                                    ☄
+                                </div>
+
+                                <div>
+                                    <p class="signal-label">
+                                        Evaluation wave
+                                    </p>
+
+                                    <p class="signal-value">
+                                        {{
+                                            dashboard
+                                            .evaluation_count
+                                        }}
+                                        evaluations completed today
+                                    </p>
+                                </div>
+                            </section>
+
+                            <!-- TOP PROJECT -->
+                            <section class="signal-item">
+                                <div class="signal-icon orange">
+                                    ✦
+                                </div>
+
+                                <div>
+                                    <p class="signal-label">
+                                        Cosmic science research
+                                    </p>
+
+                                    <p class="signal-value">
+                                        <strong>
+                                            {{ dashboard.top_project }}
+                                        </strong>
+
+                                        is currently the most active
+                                        project
+                                    </p>
+                                </div>
+                            </section>
+
+                            <!-- CAMPUS ACTIVITY -->
+                            <section
+                                class="
+                                    signal-item
+                                    campus-signal
+                                "
+                            >
+                                <div class="signal-icon cyan">
+                                    ⌁
+                                </div>
+
+                                <div>
+                                    <p class="signal-label">
+                                        Campus activity
+                                    </p>
+
+                                    <p class="signal-value">
+                                        Live information from the
+                                        Warsaw campus.
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="orbit-decoration"
+                                    aria-hidden="true"
+                                >
+                                    <span
+                                        class="orbit orbit-one"
+                                    ></span>
+
+                                    <span
+                                        class="orbit orbit-two"
+                                    ></span>
+
+                                    <span
+                                        class="orbit-core"
+                                    ></span>
+                                </div>
+                            </section>
+                        </div>
+                    </article>
+                </aside>
+
+                <!-- CENTER COLUMN -->
+                <section class="center-column">
+
+                    <!-- PROJECTS -->
+                    <article
+                        class="
+                            panel
+                            glass-panel
+                            projects-panel
+                        "
+                    >
+                        <div class="panel-header">
+                            <div>
+                                <p class="eyebrow">
+                                    RECENT MISSIONS
+                                </p>
+
+                                <h2>
+                                    Projects completed this week
+                                </h2>
+                            </div>
+
+                            <span class="panel-menu">
+                                •••
+                            </span>
+                        </div>
+
+                        <div class="projects-list">
+                            {% for project in dashboard.projects %}
+                                <div class="project-item">
+                                    <div class="avatar-wrap">
+                                        <img
+                                            class="avatar"
+                                            src="{{ project.img_link }}"
+                                            alt="{{ project.login }}"
+                                            loading="lazy"
+                                        >
+
+                                        <span
+                                            class="avatar-orbit"
+                                        ></span>
+                                    </div>
+
+                                    <p class="project-login">
+                                        {{ project.login }}
+                                    </p>
+
+                                    <p class="project-name">
+                                        {{ project.project }}
+                                    </p>
+
+                                    <p class="project-score">
+                                        {{ project.score }} XP
+                                    </p>
+                                </div>
+                            {% else %}
+                                <p class="empty-message">
+                                    No completed projects found.
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </article>
+
+                    <!-- XP CHART -->
+                    <article
+                        class="
+                            panel
+                            glass-panel
+                            xp-panel
+                        "
+                    >
+                        <div class="panel-header">
+                            <div>
+                                <p class="eyebrow">
+                                    ENERGY CURVE
+                                </p>
+
+                                <h2>
+                                    XP activity
+                                </h2>
+                            </div>
+
+                            <span class="metric-chip">
+                                7 DAYS
+                            </span>
+                        </div>
+
+                        <div class="chart-wrapper">
+                            <canvas id="xpChart"></canvas>
+                        </div>
+                    </article>
+
+                    <!-- BOTTOM CENTER -->
+                    <section class="bottom-grid">
+
+                        <!-- COALITION PRESENCE -->
+                        <article
+                            class="
+                                panel
+                                glass-panel
+                                presence-panel
+                            "
+                        >
+                            <div class="panel-header">
+                                <div>
+                                    <p class="eyebrow">
+                                        CREW DISTRIBUTION
+                                    </p>
+
+                                    <h2>
+                                        Coalition presence
+                                    </h2>
+                                </div>
+                            </div>
+
+                            {% set coalition_values =
+                                dashboard
+                                .coalition_counts
+                                .values()
+                                | list
+                            %}
+
+                            {% set maximum_count =
+                                coalition_values
+                                | max
+                                if coalition_values
+                                else 0
+                            %}
+
+                            {% for coalition, count
+                                in dashboard
+                                .coalition_counts
+                                .items()
+                            %}
+                                {% if coalition != "unknown" %}
+                                    <div class="presence-row">
+                                        <span>
+                                            {{
+                                                coalition
+                                                | capitalize
+                                            }}
+                                        </span>
+
+                                        <div class="presence-track">
+                                            <div
+                                                class="
+                                                    presence-bar
+                                                    bar-{{ coalition }}
+                                                "
+                                                style="
+                                                    width:
+                                                    {% if maximum_count > 0 %}
+                                                        {{
+                                                            (
+                                                                count
+                                                                /
+                                                                maximum_count
+                                                                *
+                                                                100
+                                                            )
+                                                            | round
+                                                        }}%
+                                                    {% else %}
+                                                        0%
+                                                    {% endif %}
+                                                "
+                                            ></div>
+                                        </div>
+
+                                        <strong>
+                                            {{ count }}
+                                        </strong>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </article>
+
+                        <!-- RICHEST USERS -->
+                        <article
+                            class="
+                                panel
+                                glass-panel
+                                returning-panel
+                            "
+                        >
+                            <p class="eyebrow">
+                                WALLET SIGNALS
+                            </p>
+
+                            <h2>
+                                Top 3 richest students
+                            </h2>
+
+                            <div class="returning-list">
+                                {% for user
+                                    in dashboard.richest_users
+                                %}
+                                    <div class="returning-user">
+                                        <div class="small-avatar">
+                                            {{
+                                                user.login[0]
+                                                | upper
+                                            }}
+                                        </div>
+
+                                        <span>
+                                            {{ user.login }}
+                                        </span>
+
+                                        <strong>
+                                            {{ user.wallet }}
+                                        </strong>
+                                    </div>
+                                {% else %}
+                                    <p class="empty-message">
+                                        No wallet data available.
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        </article>
+                    </section>
                 </section>
 
-                <div class="signal-list">
-                    <section class="signal-item">
-                        <div class="signal-icon violet">☄</div>
-                        <div>
-                            <p class="signal-label">Evaluation wave</p>
-                            <p class="signal-value">{{ dashboard.evaluation_count }} evaluations completed today</p>
-                        </div>
-                    </section>
+                <!-- RIGHT COLUMN -->
+                <aside class="right-column">
+                    <article
+                        class="
+                            panel
+                            glass-panel
+                            coalition-panel
+                        "
+                    >
+                        <div class="panel-header">
+                            <div>
+                                <p class="eyebrow">
+                                    ORBITAL INTELLIGENCE
+                                </p>
 
-                    <section class="signal-item">
-                        <div class="signal-icon orange">✦</div>
-                        <div>
-                            <p class="signal-label">Cosmic science research</p>
-                            <p class="signal-value"><strong>{{ dashboard.top_project }}</strong> is currently the most active project</p>
-                        </div>
-                    </section>
-
-                    <section class="signal-item campus-signal">
-                        <div class="signal-icon cyan">⌁</div>
-                        <div>
-                            <p class="signal-label">Campus activity</p>
-                            <p class="signal-value">Live information from the Warsaw campus.</p>
-                        </div>
-                        <div class="orbit-decoration" aria-hidden="true">
-                            <span class="orbit orbit-one"></span>
-                            <span class="orbit orbit-two"></span>
-                            <span class="orbit-core"></span>
-                        </div>
-                    </section>
-                </div>
-            </article>
-        </aside>
-
-        <section class="center-column">
-            <article class="panel glass-panel projects-panel">
-                <div class="panel-header">
-                    <div>
-                        <p class="eyebrow">RECENT MISSIONS</p>
-                        <h2>Projects completed this week</h2>
-                    </div>
-                    <span class="panel-menu">•••</span>
-                </div>
-                <div class="projects-list">
-                    {% for project in dashboard.projects %}
-                    <div class="project-item">
-                        <div class="avatar-wrap">
-                            <img
-                                class="avatar"
-                                src="{{ project.img_link }}"
-                                alt="{{ project.login }}"
-                                loading="lazy"
-                            >
-                            <span class="avatar-orbit"></span>
-                        </div>
-                        <p class="project-login">{{ project.login }}</p>
-                        <p class="project-name">{{ project.project }}</p>
-                        <p class="project-score">{{ project.score }} XP</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </article>
-
-            <article class="panel glass-panel xp-panel">
-                <div class="panel-header">
-                    <div>
-                        <p class="eyebrow">ENERGY CURVE</p>
-                        <h2>XP activity</h2>
-                    </div>
-                    <span class="metric-chip">7 DAYS</span>
-                </div>
-                <div class="chart-wrapper"><canvas id="xpChart"></canvas></div>
-            </article>
-
-            <section class="bottom-grid">
-                <article class="panel glass-panel presence-panel">
-                    <div class="panel-header">
-                        <div>
-                            <p class="eyebrow">CREW DISTRIBUTION</p>
-                            <h2>Coalition presence</h2>
-                        </div>
-                    </div>
-                    {% for coalition, count in dashboard.coalition_counts.items() %}
-                        {% if coalition != "unknown" %}
-                        <div class="presence-row">
-                            <span>{{ coalition | capitalize }}</span>
-                            <div class="presence-track">
-                                <div class="presence-bar bar-{{ coalition }}" style="width: {{ count }}%;"></div>
+                                <h2>
+                                    Coalition statistics
+                                </h2>
                             </div>
-                            <strong>{{ count }}</strong>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </article>
 
-                <article class="panel glass-panel returning-panel">
-                    <p class="eyebrow">WALLET SIGNALS</p>
-                    <h2>Top 3 richest students</h2>
-                    <div class="returning-list">
-                        {% for user in dashboard.richest_users %}
-                        <div class="returning-user">
-                            <div class="small-avatar">{{ user.login[0] | upper }}</div>
-                            <span>{{ user.login }}</span>
-                            <strong>{{ user.wallet }}</strong>
+                            <span class="metric-chip">
+                                LIVE
+                            </span>
                         </div>
-                        {% endfor %}
-                    </div>
-                </article>
+
+                        <div class="coalition-statistics-list">
+                            {% for coalition
+                                in dashboard
+                                .coalition_statistics
+                            %}
+                                <section
+                                    class="
+                                        coalition-stat-card
+                                        coalition-stat-{{
+                                            coalition.slug
+                                        }}
+                                    "
+                                >
+                                    <div
+                                        class="
+                                            coalition-stat-header
+                                        "
+                                    >
+                                        <div
+                                            class="coalition-planet"
+                                        >
+                                            <span
+                                                class="
+                                                    coalition-planet-core
+                                                "
+                                            ></span>
+
+                                            <span
+                                                class="
+                                                    coalition-planet-ring
+                                                "
+                                            ></span>
+                                        </div>
+
+                                        <div>
+                                            <p
+                                                class="
+                                                    coalition-stat-caption
+                                                "
+                                            >
+                                                COALITION
+                                            </p>
+
+                                            <h3>
+                                                {{ coalition.name }}
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="
+                                            coalition-stat-metrics
+                                        "
+                                    >
+                                        <div
+                                            class="
+                                                coalition-stat-row
+                                            "
+                                        >
+                                            <div>
+                                                <span
+                                                    class="stat-label"
+                                                >
+                                                    Average score
+                                                </span>
+
+                                                <small>
+                                                    General Intra
+                                                    statistics
+                                                </small>
+                                            </div>
+
+                                            <strong>
+                                                {{
+                                                    coalition
+                                                    .average_score
+                                                }}
+                                            </strong>
+                                        </div>
+
+                                        <div
+                                            class="
+                                                coalition-stat-row
+                                            "
+                                        >
+                                            <div>
+                                                <span
+                                                    class="stat-label"
+                                                >
+                                                    Active members
+                                                </span>
+
+                                                <small>
+                                                    Logged in today
+                                                </small>
+                                            </div>
+
+                                            <strong>
+                                                {{
+                                                    coalition
+                                                    .active_members
+                                                }}
+                                            </strong>
+                                        </div>
+
+                                        <div
+                                            class="
+                                                coalition-stat-row
+                                            "
+                                        >
+                                            <div>
+                                                <span
+                                                    class="stat-label"
+                                                >
+                                                    Top 10 members
+                                                </span>
+
+                                                <small>
+                                                    Total coalition
+                                                    points
+                                                </small>
+                                            </div>
+
+                                            <strong>
+                                                {{
+                                                    "{:,}".format(
+                                                        coalition
+                                                        .top_10_points
+                                                    )
+                                                }}
+                                            </strong>
+                                        </div>
+                                    </div>
+                                </section>
+                            {% endfor %}
+                        </div>
+                    </article>
+                </aside>
             </section>
-        </section>
 
-        <aside class="right-column">
-            <article class="panel glass-panel coalition-panel">
-                <div class="panel-header">
-                    <div>
-                        <p class="eyebrow">ORBITAL BALANCE</p>
-                        <h2>Coalition activity</h2>
-                    </div>
-                </div>
-                <div class="coalition-chart-wrapper"><canvas id="coalitionChart"></canvas></div>
-                <div class="coalition-values">
-                    {% for coalition, count in dashboard.coalition_counts.items() %}
-                        {% if coalition != "unknown" %}
-                        <div class="coalition-value-row coalition-row-{{ coalition }}">
-                            <span><i></i>{{ coalition | capitalize }}</span>
-                            <strong>{{ count }}</strong>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </article>
-        </aside>
-    </section>
+            <script>
+                window.dashboardData = {
+                    xpValues:
+                        {{ dashboard.xp_values | tojson }}
+                };
+            </script>
+        {% endif %}
+    </main>
 
-    <script>
-        window.dashboardData = {
-            xpValues: {{ dashboard.xp_values | tojson }},
-            coalitionCounts: {{ dashboard.coalition_counts | tojson }}
-        };
-    </script>
-    {% endif %}
-</main>
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script
+        src="{{ url_for('static', filename='js/dashboard.js') }}"
+    ></script>
 </body>
 </html>

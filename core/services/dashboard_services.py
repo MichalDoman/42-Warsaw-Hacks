@@ -1,45 +1,108 @@
 from typing import Any
+import time
+from typing import Any
 
-from core.api.api_client import get_access_token, load_credentials
+from core.api.api_client import (
+    get_access_token,
+    load_credentials,
+)
 from core.api.coalitions import get_all_coalition_users
 from core.api.locations import (
-    get_all_locations,
+    get_locations_logged_in_today,
     segregate_locations_by_coalition,
 )
 from core.api.projects import create_projects_for_warsaw_users
 from core.api.users import get_all_users
-from core.services.projects_stats import get_latest_projects_data
-from core.services.users_stats import get_top_3_richest_users
+from core.data_types import Location
+from core.services.coalitions_stats import (
+    count_unique_users_by_coalition,
+    get_leading_coalition,
+)
+from core.services.projects_stats import (
+    get_latest_projects_data,
+    get_mission_streak,
+)
+from core.services.users_stats import (
+    get_first_login_today,
+    get_top_3_richest_users,
+)
 
+DASHBOARD_CACHE_TTL = 120
+
+_dashboard_cache: dict[str, Any] | None = None
+_dashboard_cache_created_at = 0.0
 
 def load_coalition_presence(
     access_token: str,
+    today_locations: list[Location],
 ) -> dict[str, int]:
-    coalition_users = get_all_coalition_users(access_token)
-    locations = get_all_locations(access_token)
-
-    segregated_logged_in = segregate_locations_by_coalition(
-        locations,
-        coalition_users,
+    """
+    Count unique users who logged in today,
+    grouped by coalition.
+    """
+    coalition_users = get_all_coalition_users(
+        access_token
     )
 
-    return {
-        "orionis": len(
-            segregated_logged_in.get("orionis", [])
-        ),
-        "lunaria": len(
-            segregated_logged_in.get("lunaria", [])
-        ),
-        "unitterax": len(
-            segregated_logged_in.get("unitterax", [])
-        ),
-        "unknown": len(
-            segregated_logged_in.get("unknown", [])
-        ),
-    }
+    locations_by_coalition = (
+        segregate_locations_by_coalition(
+            locations=today_locations,
+            coalition_users=coalition_users,
+        )
+    )
+
+    return count_unique_users_by_coalition(
+        locations_by_coalition
+    )
 
 
-def get_dashboard_data() -> dict[str, Any]:
+def build_coalition_statistics(
+    coalition_counts: dict[str, int],
+) -> list[dict[str, str | int | float]]:
+    """
+    Build data for coalition cards.
+
+    Active members use real data.
+    Other statistics are temporary mock values.
+    """
+    return [
+        {
+            "slug": "orionis",
+            "name": "Orionis",
+            "average_score": 103.8,
+            "active_members": coalition_counts.get(
+                "orionis",
+                0,
+            ),
+            "top_10_points": 18_420,
+        },
+        {
+            "slug": "lunaria",
+            "name": "Lunaria",
+            "average_score": 101.4,
+            "active_members": coalition_counts.get(
+                "lunaria",
+                0,
+            ),
+            "top_10_points": 16_980,
+        },
+        {
+            "slug": "unitterax",
+            "name": "Unitterax",
+            "average_score": 105.1,
+            "active_members": coalition_counts.get(
+                "unitterax",
+                0,
+            ),
+            "top_10_points": 17_750,
+        },
+    ]
+
+
+def _load_dashboard_data() -> dict[str, Any]:
+    """
+    Load and prepare all data required by dashboard.html.
+    """
     client_id, client_secret = load_credentials()
 
     access_token = get_access_token(
@@ -47,39 +110,68 @@ def get_dashboard_data() -> dict[str, Any]:
         client_secret=client_secret,
     )
 
-    all_users = get_all_users(access_token)
+    all_users = get_all_users(
+        access_token
+    )
 
-    all_projects = create_projects_for_warsaw_users(
-        users=all_users,
-        access_token=access_token,
+    today_locations = get_locations_logged_in_today(
+        access_token
     )
 
     coalition_counts = load_coalition_presence(
         access_token=access_token,
+        today_locations=today_locations,
     )
 
-    known_coalitions = {
-        name: count
-        for name, count in coalition_counts.items()
-        if name != "unknown"
-    }
-
-    if known_coalitions:
-        leading_coalition = max(
-            known_coalitions,
-            key=known_coalitions.get,
+    leading_coalition, leading_count = (
+        get_leading_coalition(
+            coalition_counts
         )
-        leading_count = known_coalitions[leading_coalition]
-    else:
-        leading_coalition = "orionis"
-        leading_count = 0
+    )
 
-    richest_users = get_top_3_richest_users(all_users)
+    first_login = get_first_login_today(
+        locations=today_locations,
+        users=all_users,
+    )
+
+    all_projects = create_projects_for_warsaw_users(
+        users=all_users,
+        access_token=access_token,
+        days=10,
+    )
+
+    richest_users = get_top_3_richest_users(
+        all_users
+    )
+
+    mission_streak = get_mission_streak(
+    all_projects
+)
+
+    coalition_statistics = (
+        build_coalition_statistics(
+            coalition_counts
+        )
+    )
 
     return {
         "coalition_counts": coalition_counts,
-        "leading_coalition": leading_coalition,
+
+        "leading_coalition": (
+            leading_coalition
+            if leading_coalition is not None
+            else "none"
+        ),
+
         "leading_count": leading_count,
+
+        "first_login": first_login,
+        "mission_streak": mission_streak,
+
+        "coalition_statistics": (
+            coalition_statistics
+        ),
+
         "richest_users": [
             {
                 "login": user.login,
@@ -87,16 +179,50 @@ def get_dashboard_data() -> dict[str, Any]:
             }
             for user in richest_users
         ],
+
         "projects": get_latest_projects_data(
             projects=all_projects,
             users=all_users,
+            limit=5,
         ),
-        "xp_values": [12, 18, 27, 43, 66, 94, 51],
-        "returning_users": [
-            "natalia",
-            "student42",
-            "jnowak",
+
+        "xp_values": [
+            12,
+            18,
+            27,
+            43,
+            66,
+            94,
+            51,
         ],
+
         "evaluation_count": 42,
         "top_project": "minishell",
     }
+
+def get_dashboard_data(
+    force_refresh: bool = False,
+) -> dict[str, Any]:
+    global _dashboard_cache
+    global _dashboard_cache_created_at
+
+    current_time = time.monotonic()
+
+    cache_is_valid = (
+        _dashboard_cache is not None
+        and (
+            current_time
+            - _dashboard_cache_created_at
+        )
+        < DASHBOARD_CACHE_TTL
+    )
+
+    if cache_is_valid and not force_refresh:
+        return _dashboard_cache
+
+    dashboard_data = _load_dashboard_data()
+
+    _dashboard_cache = dashboard_data
+    _dashboard_cache_created_at = current_time
+
+    return dashboard_data
