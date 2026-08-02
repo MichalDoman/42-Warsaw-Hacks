@@ -854,7 +854,9 @@
                                         </div>
 
                                         <div class="coalition-total-score">
-                                            <span>TOTAL SCORE</span>
+                                            <span>
+                                                TOTAL SCORE
+                                            </span>
 
                                             <strong>
                                                 {{ "{:,}".format(coalition.total_score) }}
@@ -866,16 +868,80 @@
                                         <div class="coalition-stat-row">
                                             <div>
                                                 <span class="stat-label">
-                                                    Active members
+                                                    Active students
                                                 </span>
 
                                                 <small>
-                                                    Logged in today
+                                                    Active in the coalition
                                                 </small>
                                             </div>
 
                                             <strong>
-                                                {{ coalition.active_members }}
+                                                {{ coalition.active_students }}
+                                            </strong>
+                                        </div>
+
+                                        <div class="coalition-stat-row">
+                                            <div>
+                                                <span class="stat-label">
+                                                    Average score
+                                                </span>
+
+                                                <small>
+                                                    Points per coalition member
+                                                </small>
+                                            </div>
+
+                                            <strong>
+                                                {{ "{:,.2f}".format(coalition.average_score) }}
+                                            </strong>
+                                        </div>
+
+                                        <div class="coalition-stat-row">
+                                            <div>
+                                                <span class="stat-label">
+                                                    Top 10 members
+                                                </span>
+
+                                                <small>
+                                                    Combined score
+                                                </small>
+                                            </div>
+
+                                            <strong>
+                                                {{ "{:,}".format(coalition.top_10_score) }}
+                                            </strong>
+                                        </div>
+
+                                        <div class="coalition-stat-row">
+                                            <div>
+                                                <span class="stat-label">
+                                                    Top 3 members
+                                                </span>
+
+                                                <small>
+                                                    Combined score
+                                                </small>
+                                            </div>
+
+                                            <strong>
+                                                {{ "{:,}".format(coalition.top_3_score) }}
+                                            </strong>
+                                        </div>
+
+                                        <div class="coalition-stat-row">
+                                            <div>
+                                                <span class="stat-label">
+                                                    Logged in today
+                                                </span>
+
+                                                <small>
+                                                    Unique campus presence
+                                                </small>
+                                            </div>
+
+                                            <strong>
+                                                {{ coalition.logged_in_today }}
                                             </strong>
                                         </div>
                                     </div>

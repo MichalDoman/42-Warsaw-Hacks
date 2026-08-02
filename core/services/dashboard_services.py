@@ -41,22 +41,16 @@ _dashboard_cache: dict[str, Any] | None = None
 _dashboard_cache_created_at = 0.0
 
 def load_coalition_presence(
-    access_token: str,
     today_locations: list[Location],
+    coalition_users: dict[str, list[dict[str, Any]]],
 ) -> dict[str, int]:
     """
     Count unique users who logged in today,
     grouped by coalition.
     """
-    coalition_users = get_all_coalition_users(
-        access_token
-    )
-
-    locations_by_coalition = (
-        segregate_locations_by_coalition(
-            locations=today_locations,
-            coalition_users=coalition_users,
-        )
+    locations_by_coalition = segregate_locations_by_coalition(
+        locations=today_locations,
+        coalition_users=coalition_users,
     )
 
     return count_unique_users_by_coalition(
@@ -67,21 +61,44 @@ def load_coalition_presence(
 def build_coalition_statistics(
     coalitions: list[Coalition],
     coalition_counts: dict[str, int],
+    coalition_metrics: dict[
+        str,
+        dict[str, int | float],
+    ],
 ) -> list[dict[str, str | int | float]]:
-    statistics = [
-        {
-            "slug": coalition.name.lower(),
+    statistics: list[dict[str, str | int | float]] = []
+
+    for coalition in coalitions:
+        slug = coalition.name.lower()
+        metrics = coalition_metrics.get(slug, {})
+
+        statistics.append({
+            "slug": slug,
             "name": coalition.name,
             "image_url": coalition.image_url,
             "color": coalition.color,
             "total_score": coalition.score,
-            "active_members": coalition_counts.get(
-                coalition.name.lower(),
+            "logged_in_today": coalition_counts.get(
+                slug,
                 0,
             ),
-        }
-        for coalition in coalitions
-    ]
+            "active_students": metrics.get(
+                "active_students",
+                0,
+            ),
+            "average_score": metrics.get(
+                "average_score",
+                0.0,
+            ),
+            "top_10_score": metrics.get(
+                "top_10_score",
+                0,
+            ),
+            "top_3_score": metrics.get(
+                "top_3_score",
+                0,
+            ),
+        })
 
     return sorted(
         statistics,
@@ -108,6 +125,7 @@ def _load_dashboard_data() -> dict[str, Any]:
     today_locations = get_locations_logged_in_today(
         access_token
     )
+
     hourly_login_activity = get_hourly_login_activity(
         today_locations
     )
@@ -116,15 +134,17 @@ def _load_dashboard_data() -> dict[str, Any]:
         hourly_login_activity
     )
 
-    coalition_counts = load_coalition_presence(
-        access_token=access_token,
-        today_locations=today_locations,
+    coalition_users = get_all_coalition_users(
+        access_token
     )
 
-    leading_coalition, leading_count = (
-        get_leading_coalition(
-            coalition_counts
-        )
+    coalition_counts = load_coalition_presence(
+        today_locations=today_locations,
+        coalition_users=coalition_users,
+    )
+
+    leading_coalition, leading_count = get_leading_coalition(
+        coalition_counts
     )
 
     total_logged_in = sum(
@@ -152,25 +172,27 @@ def _load_dashboard_data() -> dict[str, Any]:
         all_projects
     )
 
-    coalitions = get_all_coalitions(access_token)
+    coalitions = get_all_coalitions(
+        access_token
+    )
+
     coalition_metrics = build_coalition_metrics(
         all_coalition_users=coalition_users,
     )
-    print(coalition_metrics)
+
     coalition_statistics = build_coalition_statistics(
         coalitions=coalitions,
         coalition_counts=coalition_counts,
+        coalition_metrics=coalition_metrics,
     )
 
     return {
         "coalition_counts": coalition_counts,
-
         "leading_coalition": (
             leading_coalition
             if leading_coalition is not None
             else "none"
         ),
-
         "leading_count": leading_count,
         "total_logged_in": total_logged_in,
         "first_login": first_login,
@@ -178,11 +200,7 @@ def _load_dashboard_data() -> dict[str, Any]:
         "hourly_login_activity": hourly_login_activity,
         "hour_labels": build_hour_labels(),
         "peak_login_hour": peak_login_hour,
-        
-        "coalition_statistics": (
-            coalition_statistics
-        ),
-
+        "coalition_statistics": coalition_statistics,
         "richest_users": [
             {
                 "login": user.login,
@@ -190,13 +208,11 @@ def _load_dashboard_data() -> dict[str, Any]:
             }
             for user in richest_users
         ],
-
         "projects": get_latest_projects_data(
             projects=all_projects,
             users=all_users,
             limit=5,
         ),
-
         "evaluation_count": 42,
         "top_project": "minishell",
     }
