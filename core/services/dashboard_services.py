@@ -74,20 +74,24 @@ def build_coalition_statistics(
         slug = coalition.name.lower()
         metrics = coalition_metrics.get(slug, {})
 
+        active_students = int(
+            metrics.get("active_students", 0)
+        )
+
+        average_score = (
+            round(coalition.score / active_students, 2)
+            if active_students > 0
+            else 0.0
+        )
+
         statistics.append({
             "slug": slug,
             "name": coalition.name,
             "image_url": coalition.image_url,
             "color": coalition.color,
             "total_score": coalition.score,
-            "active_students": metrics.get(
-                "active_students",
-                0,
-            ),
-            "average_score": metrics.get(
-                "average_score",
-                0.0,
-            ),
+            "active_students": active_students,
+            "average_score": average_score,
             "top_10_score": metrics.get(
                 "top_10_score",
                 0,

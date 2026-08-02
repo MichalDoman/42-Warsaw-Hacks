@@ -179,9 +179,6 @@ def build_coalition_metrics(
                 coalition_users=coalition_users,
                 active_student_ids=active_student_ids,
             ),
-            "average_score": get_average_score_per_user(
-                coalition_users
-            ),
             "top_10_score": get_top_10_score_sum(
                 coalition_users
             ),
