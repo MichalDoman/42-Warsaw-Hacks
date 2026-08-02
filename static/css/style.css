@@ -1660,20 +1660,10 @@ button { font: inherit; }
 }
 
 .coalition-logo {
-    display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
-
-    filter:
-        drop-shadow(
-            0 0 8px
-            color-mix(
-                in srgb,
-                var(--coalition-color) 65%,
-                transparent
-            )
-        );
+    filter: brightness(0) invert(1);
 }
 
 .coalition-logo-fallback {

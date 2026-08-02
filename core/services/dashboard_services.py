@@ -19,6 +19,7 @@ from core.data_types import Location, Coalition
 from core.services.coalitions_stats import (
     count_unique_users_by_coalition,
     get_leading_coalition,
+    build_coalition_metrics
 )
 from core.services.projects_stats import (
     get_latest_projects_data,
@@ -152,6 +153,10 @@ def _load_dashboard_data() -> dict[str, Any]:
     )
 
     coalitions = get_all_coalitions(access_token)
+    coalition_metrics = build_coalition_metrics(
+        all_coalition_users=coalition_users,
+    )
+    print(coalition_metrics)
     coalition_statistics = build_coalition_statistics(
         coalitions=coalitions,
         coalition_counts=coalition_counts,
