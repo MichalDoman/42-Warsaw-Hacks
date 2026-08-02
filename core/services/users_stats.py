@@ -149,3 +149,24 @@ def get_today_explorers_wallet(
         for user in users
         if user.id in active_user_ids
     )
+
+def count_active_users_by_coalition(
+    users: list[User],
+    coalition_users: dict[str, list[dict[str, Any]]],
+) -> dict[str, int]:
+    active_user_ids: set[int] = {
+        user.id
+        for user in users
+        if user.is_active
+    }
+
+    result: dict[str, int] = {}
+
+    for coalition_name, members in coalition_users.items():
+        result[coalition_name] = sum(
+            1
+            for member in members
+            if int(member["user_id"]) in active_user_ids
+        )
+
+    return result

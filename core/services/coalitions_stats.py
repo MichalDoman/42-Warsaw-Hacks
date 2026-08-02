@@ -58,13 +58,15 @@ def get_coalition_user_ids(
     user_ids: set[int] = set()
 
     for coalition_user in coalition_users:
-        user_data = coalition_user.get("user") or {}
-        user_id = user_data.get("id")
+        user_id = coalition_user.get("user_id")
 
         if user_id is None:
             continue
 
-        user_ids.add(int(user_id))
+        try:
+            user_ids.add(int(user_id))
+        except (TypeError, ValueError):
+            continue
 
     return user_ids
 
