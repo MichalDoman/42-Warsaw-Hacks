@@ -187,14 +187,14 @@ The service layer then filters and processes the data. Flask passes the final re
 
 # What's not done
 
-Updating mock data statistic with actual API data.
-Several statistic ideas that require extra permissions for specific requests. these include:
-	- Evaluation number per evaluator distribution
-	- Top evaluators
-	- Who is coming back from freeze soon.
-	- Altarian wealth distribution
+1. Updating mock data statistic with actual API data.
+2. Several statistic ideas that require extra permissions for specific requests. these include:
+- Evaluation number per evaluator distribution
+- Top evaluators
+- Who is coming back from freeze soon.
+- Altarian wealth distribution
 
-Connect the project with actual database
-Cleanify html and css files. 
-App deployment
-Make the layout fully responsive for different TV resolutions.
+3. Connect the project with actual database.
+4. Cleanify html and css files. 
+5. App deployment.
+6. Make the layout fully responsive for different TV resolutions.
