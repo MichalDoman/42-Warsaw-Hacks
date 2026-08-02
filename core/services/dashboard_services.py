@@ -1,4 +1,3 @@
-from typing import Any
 import time
 from typing import Any
 
@@ -6,14 +5,17 @@ from core.api.api_client import (
     get_access_token,
     load_credentials,
 )
-from core.api.coalitions import get_all_coalition_users
+from core.api.coalitions import (
+    get_all_coalition_users,
+    get_all_coalitions
+)
 from core.api.locations import (
     get_locations_logged_in_today,
     segregate_locations_by_coalition,
 )
 from core.api.projects import create_projects_for_warsaw_users
 from core.api.users import get_all_users
-from core.data_types import Location
+from core.data_types import Location, Coalition
 from core.services.coalitions_stats import (
     count_unique_users_by_coalition,
     get_leading_coalition,
@@ -62,46 +64,29 @@ def load_coalition_presence(
 
 
 def build_coalition_statistics(
+    coalitions: list[Coalition],
     coalition_counts: dict[str, int],
 ) -> list[dict[str, str | int | float]]:
-    """
-    Build data for coalition cards.
-
-    Active members use real data.
-    Other statistics are temporary mock values.
-    """
-    return [
+    statistics = [
         {
-            "slug": "orionis",
-            "name": "Orionis",
-            "average_score": 103.8,
+            "slug": coalition.name.lower(),
+            "name": coalition.name,
+            "image_url": coalition.image_url,
+            "color": coalition.color,
+            "total_score": coalition.score,
             "active_members": coalition_counts.get(
-                "orionis",
+                coalition.name.lower(),
                 0,
             ),
-            "top_10_points": 18_420,
-        },
-        {
-            "slug": "lunaria",
-            "name": "Lunaria",
-            "average_score": 101.4,
-            "active_members": coalition_counts.get(
-                "lunaria",
-                0,
-            ),
-            "top_10_points": 16_980,
-        },
-        {
-            "slug": "unitterax",
-            "name": "Unitterax",
-            "average_score": 105.1,
-            "active_members": coalition_counts.get(
-                "unitterax",
-                0,
-            ),
-            "top_10_points": 17_750,
-        },
+        }
+        for coalition in coalitions
     ]
+
+    return sorted(
+        statistics,
+        key=lambda coalition: coalition["total_score"],
+        reverse=True,
+    )
 
 
 def _load_dashboard_data() -> dict[str, Any]:
@@ -163,13 +148,13 @@ def _load_dashboard_data() -> dict[str, Any]:
     )
 
     mission_streak = get_mission_streak(
-    all_projects
-)
+        all_projects
+    )
 
-    coalition_statistics = (
-        build_coalition_statistics(
-            coalition_counts
-        )
+    coalitions = get_all_coalitions(access_token)
+    coalition_statistics = build_coalition_statistics(
+        coalitions=coalitions,
+        coalition_counts=coalition_counts,
     )
 
     return {
@@ -189,7 +174,6 @@ def _load_dashboard_data() -> dict[str, Any]:
         "hour_labels": build_hour_labels(),
         "peak_login_hour": peak_login_hour,
         
-
         "coalition_statistics": (
             coalition_statistics
         ),

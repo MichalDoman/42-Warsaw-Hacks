@@ -811,96 +811,61 @@
                                 LIVE
                             </span>
                         </div>
-
                         <div class="coalition-statistics-list">
-                            {% for coalition
-                                in dashboard
-                                .coalition_statistics
-                            %}
+                            {% for coalition in dashboard.coalition_statistics %}
                                 <section
                                     class="
                                         coalition-stat-card
-                                        coalition-stat-{{
-                                            coalition.slug
-                                        }}
+                                        coalition-stat-{{ coalition.slug }}
                                     "
                                 >
-                                    <div
-                                        class="
-                                            coalition-stat-header
-                                        "
-                                    >
+                                    <div class="coalition-stat-header">
                                         <div
-                                            class="coalition-planet"
+                                            class="coalition-stat-identity"
+                                            style="--coalition-color: {{ coalition.color }};"
                                         >
-                                            <span
-                                                class="
-                                                    coalition-planet-core
-                                                "
-                                            ></span>
+                                            <div
+                                                class="coalition-logo-wrap"
+                                                style="--coalition-color: {{ coalition.color }};"
+                                            >
+                                                {% if coalition.image_url %}
+                                                    <img
+                                                        class="coalition-logo"
+                                                        src="{{ coalition.image_url }}"
+                                                        alt="{{ coalition.name }} logo"
+                                                        loading="lazy"
+                                                    >
+                                                {% else %}
+                                                    <div class="coalition-logo-fallback">
+                                                        {{ coalition.name[0] | upper }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
 
-                                            <span
-                                                class="
-                                                    coalition-planet-ring
-                                                "
-                                            ></span>
+                                            <div>
+                                                <p class="coalition-stat-caption">
+                                                    COALITION
+                                                </p>
+
+                                                <h3>
+                                                    {{ coalition.name }}
+                                                </h3>
+                                            </div>
                                         </div>
 
-                                        <div>
-                                            <p
-                                                class="
-                                                    coalition-stat-caption
-                                                "
-                                            >
-                                                COALITION
-                                            </p>
+                                        <div class="coalition-total-score">
+                                            <span>TOTAL SCORE</span>
 
-                                            <h3>
-                                                {{ coalition.name }}
-                                            </h3>
+                                            <strong>
+                                                {{ "{:,}".format(coalition.total_score) }}
+                                            </strong>
                                         </div>
                                     </div>
 
-                                    <div
-                                        class="
-                                            coalition-stat-metrics
-                                        "
-                                    >
-                                        <div
-                                            class="
-                                                coalition-stat-row
-                                            "
-                                        >
+                                    <div class="coalition-stat-metrics">
+                                        <div class="coalition-stat-row">
                                             <div>
-                                                <span
-                                                    class="stat-label"
-                                                >
-                                                    Average score
-                                                </span>
-
-                                                <small>
-                                                    General Intra
-                                                    statistics
-                                                </small>
-                                            </div>
-
-                                            <strong>
-                                                {{
-                                                    coalition
-                                                    .average_score
-                                                }}
-                                            </strong>
-                                        </div>
-
-                                        <div
-                                            class="
-                                                coalition-stat-row
-                                            "
-                                        >
-                                            <div>
-                                                <span
-                                                    class="stat-label"
-                                                >
+                                                <span class="stat-label">
                                                     Active members
                                                 </span>
 
@@ -910,42 +875,15 @@
                                             </div>
 
                                             <strong>
-                                                {{
-                                                    coalition
-                                                    .active_members
-                                                }}
-                                            </strong>
-                                        </div>
-
-                                        <div
-                                            class="
-                                                coalition-stat-row
-                                            "
-                                        >
-                                            <div>
-                                                <span
-                                                    class="stat-label"
-                                                >
-                                                    Top 10 members
-                                                </span>
-
-                                                <small>
-                                                    Total coalition
-                                                    points
-                                                </small>
-                                            </div>
-
-                                            <strong>
-                                                {{
-                                                    "{:,}".format(
-                                                        coalition
-                                                        .top_10_points
-                                                    )
-                                                }}
+                                                {{ coalition.active_members }}
                                             </strong>
                                         </div>
                                     </div>
                                 </section>
+                            {% else %}
+                                <p class="empty-message">
+                                    No coalition data available.
+                                </p>
                             {% endfor %}
                         </div>
                     </article>

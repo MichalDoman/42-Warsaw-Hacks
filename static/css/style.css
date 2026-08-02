@@ -1603,3 +1603,114 @@ button { font: inherit; }
         animation: none;
     }
 }
+.coalition-stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.coalition-stat-identity h3 {
+    margin: 0;
+    color: var(--coalition-color);
+}
+
+.coalition-stat-identity {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.coalition-logo-wrap {
+    --coalition-color: #ffffff;
+
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    padding: 6px;
+
+    border: 1px solid var(--coalition-color);
+    border-radius: 18px;
+
+    background:
+        radial-gradient(
+            circle,
+            color-mix(
+                in srgb,
+                var(--coalition-color) 28%,
+                transparent
+            ),
+            transparent 72%
+        );
+
+    box-shadow:
+        0 0 22px color-mix(
+            in srgb,
+            var(--coalition-color) 35%,
+            transparent
+        ),
+        inset 0 0 18px color-mix(
+            in srgb,
+            var(--coalition-color) 16%,
+            transparent
+        );
+}
+
+.coalition-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 0 8px
+            color-mix(
+                in srgb,
+                var(--coalition-color) 65%,
+                transparent
+            )
+        );
+}
+
+.coalition-logo-fallback {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+
+    border-radius: 13px;
+    background: color-mix(
+        in srgb,
+        var(--coalition-color) 20%,
+        transparent
+    );
+
+    color: var(--coalition-color);
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.coalition-total-score {
+    flex: 0 0 auto;
+    text-align: right;
+}
+
+.coalition-total-score span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.coalition-total-score strong {
+    display: block;
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 900;
+}

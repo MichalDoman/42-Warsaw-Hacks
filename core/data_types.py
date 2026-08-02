@@ -19,6 +19,15 @@ class Location:
 
 
 @dataclass
+class Coalition:
+	id: int
+	name: str
+	image_url: str
+	color: str
+	score: int
+
+
+@dataclass
 class Project:
     id: int
     user_id: int
