@@ -26,6 +26,11 @@ from core.services.users_stats import (
     get_first_login_today,
     get_top_3_richest_users,
 )
+from core.services.locations_stats import (
+    build_hour_labels,
+    get_hourly_login_activity,
+    get_peak_login_hour,
+)
 
 DASHBOARD_CACHE_TTL = 120
 
@@ -117,6 +122,13 @@ def _load_dashboard_data() -> dict[str, Any]:
     today_locations = get_locations_logged_in_today(
         access_token
     )
+    hourly_login_activity = get_hourly_login_activity(
+        today_locations
+    )
+
+    peak_login_hour = get_peak_login_hour(
+        hourly_login_activity
+    )
 
     coalition_counts = load_coalition_presence(
         access_token=access_token,
@@ -127,6 +139,12 @@ def _load_dashboard_data() -> dict[str, Any]:
         get_leading_coalition(
             coalition_counts
         )
+    )
+
+    total_logged_in = sum(
+        count
+        for coalition, count in coalition_counts.items()
+        if coalition != "unknown"
     )
 
     first_login = get_first_login_today(
@@ -164,9 +182,13 @@ def _load_dashboard_data() -> dict[str, Any]:
         ),
 
         "leading_count": leading_count,
-
+        "total_logged_in": total_logged_in,
         "first_login": first_login,
         "mission_streak": mission_streak,
+        "hourly_login_activity": hourly_login_activity,
+        "hour_labels": build_hour_labels(),
+        "peak_login_hour": peak_login_hour,
+        
 
         "coalition_statistics": (
             coalition_statistics
@@ -185,16 +207,6 @@ def _load_dashboard_data() -> dict[str, Any]:
             users=all_users,
             limit=5,
         ),
-
-        "xp_values": [
-            12,
-            18,
-            27,
-            43,
-            66,
-            94,
-            51,
-        ],
 
         "evaluation_count": 42,
         "top_project": "minishell",

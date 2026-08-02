@@ -85,50 +85,95 @@
                                 coalition-{{ dashboard.leading_coalition }}
                             "
                         >
-                            <div class="planet-icon">
-                                ☀
+                            <div class="solar-system" aria-hidden="true">
+                                <span class="solar-glow"></span>
+                                <span class="solar-core"></span>
+
+                                <span
+                                    class="
+                                        solar-orbit
+                                        solar-orbit-one
+                                    "
+                                ></span>
+
+                                <span
+                                    class="
+                                        solar-orbit
+                                        solar-orbit-two
+                                    "
+                                ></span>
+
+                                <span
+                                    class="
+                                        solar-star
+                                        solar-star-one
+                                    "
+                                >
+                                    ✦
+                                </span>
+
+                                <span
+                                    class="
+                                        solar-star
+                                        solar-star-two
+                                    "
+                                >
+                                    ✧
+                                </span>
                             </div>
 
-                            <div>
-                                {% if dashboard.leading_count > 0 %}
-                                    <p class="activity-title">
-                                        Highly active
+                            <div class="activity-content">
+                                {% if dashboard.total_logged_in > 0 %}
+                                    <p class="activity-kicker">
+                                        HIGHLY ACTIVE
                                     </p>
+
+                                    <h3 class="activity-coalition-name">
+                                        {{
+                                            dashboard.leading_coalition
+                                            | upper
+                                        }}
+                                    </h3>
 
                                     <p class="activity-description">
-                                        Most students who logged in today
-                                        were from
-
-                                        <strong>
-                                            {{
-                                                dashboard.leading_coalition
-                                                | capitalize
-                                            }}
-                                        </strong>
+                                        sent the strongest signal today
                                     </p>
 
-                                    <p class="activity-value">
-                                        {{ dashboard.leading_count }}
+                                    <div class="activity-total-row">
+                                        <span class="activity-total-value">
+                                            {{ dashboard.total_logged_in }}
+                                        </span>
 
-                                        {% if dashboard.leading_count == 1 %}
-                                            person
-                                        {% else %}
-                                            people
-                                        {% endif %}
-                                    </p>
+                                        <span class="activity-total-label">
+                                            {% if dashboard.total_logged_in == 1 %}
+                                                explorer entered orbit today
+                                            {% else %}
+                                                explorers entered orbit today
+                                            {% endif %}
+                                        </span>
+                                    </div>
                                 {% else %}
-                                    <p class="activity-title">
-                                        No activity yet
+                                    <p class="activity-kicker">
+                                        CAMPUS ORBIT
                                     </p>
+
+                                    <h3 class="activity-coalition-name">
+                                        NO SIGNAL
+                                    </h3>
 
                                     <p class="activity-description">
-                                        No coalition members have logged
-                                        in today.
+                                        No explorers have entered orbit today.
                                     </p>
 
-                                    <p class="activity-value">
-                                        0 people
-                                    </p>
+                                    <div class="activity-total-row">
+                                        <span class="activity-total-value">
+                                            0
+                                        </span>
+
+                                        <span class="activity-total-label">
+                                            explorers entered orbit today
+                                        </span>
+                                    </div>
                                 {% endif %}
                             </div>
                         </section>
@@ -550,32 +595,64 @@
                         </div>
                     </article>
 
-                    <!-- XP CHART -->
-                    <article
-                        class="
-                            panel
-                            glass-panel
-                            xp-panel
-                        "
-                    >
+                    <!-- PEAK ORBIT -->
+                    <article class="panel glass-panel peak-orbit-panel">
                         <div class="panel-header">
                             <div>
                                 <p class="eyebrow">
-                                    ENERGY CURVE
+                                    CAMPUS ENERGY SIGNAL
                                 </p>
 
                                 <h2>
-                                    XP activity
+                                    Peak Orbit
                                 </h2>
                             </div>
 
                             <span class="metric-chip">
-                                7 DAYS
+                                TODAY
                             </span>
                         </div>
 
-                        <div class="chart-wrapper">
-                            <canvas id="xpChart"></canvas>
+                        <div class="peak-orbit-summary">
+                            <div class="peak-orbit-icon" aria-hidden="true">
+                                <span class="peak-orbit-planet"></span>
+                                <span class="peak-orbit-ring"></span>
+                                <span class="peak-orbit-star">✦</span>
+                            </div>
+
+                            <div>
+                                <p class="peak-orbit-label">
+                                    Most active hour
+                                </p>
+
+                                {% if dashboard.peak_login_hour %}
+                                    <p class="peak-orbit-time">
+                                        {{ dashboard.peak_login_hour.label }}
+                                    </p>
+
+                                    <p class="peak-orbit-description">
+                                        {{ dashboard.peak_login_hour.count }}
+
+                                        {% if dashboard.peak_login_hour.count == 1 %}
+                                            unique student logged in
+                                        {% else %}
+                                            unique students logged in
+                                        {% endif %}
+                                    </p>
+                                {% else %}
+                                    <p class="peak-orbit-time">
+                                        No signal yet
+                                    </p>
+
+                                    <p class="peak-orbit-description">
+                                        No login activity recorded today.
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="chart-wrapper peak-orbit-chart-wrapper">
+                            <canvas id="peakOrbitChart"></canvas>
                         </div>
                     </article>
 
@@ -877,8 +954,12 @@
 
             <script>
                 window.dashboardData = {
-                    xpValues:
-                        {{ dashboard.xp_values | tojson }}
+                    hourLabels:
+                        {{ dashboard.hour_labels | tojson }},
+                    hourlyLoginActivity:
+                        {{ dashboard.hourly_login_activity | tojson }},
+                    peakLoginHour:
+                        {{ dashboard.peak_login_hour | tojson }}
                 };
             </script>
         {% endif %}

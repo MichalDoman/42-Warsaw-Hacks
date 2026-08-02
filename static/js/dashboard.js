@@ -1,38 +1,60 @@
 const dashboardData = window.dashboardData ?? {
-    xpValues: [],
+    hourLabels: [],
+    hourlyLoginActivity: [],
+    peakLoginHour: null,
 };
 
-const xpCanvas = document.getElementById("xpChart");
+const peakOrbitCanvas =
+    document.getElementById("peakOrbitChart");
 
-if (xpCanvas && typeof Chart !== "undefined") {
-    new Chart(xpCanvas, {
+if (
+    peakOrbitCanvas
+    && typeof Chart !== "undefined"
+) {
+    const peakHour =
+        dashboardData.peakLoginHour?.hour ?? null;
+
+    const pointColors =
+        dashboardData.hourlyLoginActivity.map(
+            (_, index) => (
+                index === peakHour
+                    ? "#ffd84d"
+                    : "#5cd6ff"
+            ),
+        );
+
+    const pointRadii =
+        dashboardData.hourlyLoginActivity.map(
+            (_, index) => (
+                index === peakHour
+                    ? 7
+                    : 3
+            ),
+        );
+
+    new Chart(peakOrbitCanvas, {
         type: "line",
 
         data: {
-            labels: [
-                "Mon",
-                "Tue",
-                "Wed",
-                "Thu",
-                "Fri",
-                "Sat",
-                "Sun",
-            ],
+            labels: dashboardData.hourLabels,
 
             datasets: [
                 {
-                    label: "XP activity",
-                    data: dashboardData.xpValues,
+                    label: "Unique logins",
+                    data:
+                        dashboardData
+                            .hourlyLoginActivity,
                     borderColor: "#5cd6ff",
                     backgroundColor:
                         "rgba(92, 214, 255, 0.09)",
                     borderWidth: 3,
-                    tension: 0.42,
+                    tension: 0.38,
                     fill: true,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    pointBackgroundColor: "#0b1025",
-                    pointBorderColor: "#a970ff",
+                    pointRadius: pointRadii,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor:
+                        pointColors,
+                    pointBorderColor: "#0b1025",
                     pointBorderWidth: 2,
                 },
             ],
@@ -60,6 +82,21 @@ if (xpCanvas && typeof Chart !== "undefined") {
                     borderWidth: 1,
                     titleColor: "#ffffff",
                     bodyColor: "#c7d3f5",
+
+                    callbacks: {
+                        label(context) {
+                            const value = context.raw;
+
+                            return (
+                                `${value} unique `
+                                + (
+                                    value === 1
+                                        ? "student"
+                                        : "students"
+                                )
+                            );
+                        },
+                    },
                 },
             },
 
@@ -71,6 +108,9 @@ if (xpCanvas && typeof Chart !== "undefined") {
 
                     ticks: {
                         color: "#7f8db7",
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 12,
                     },
 
                     border: {
@@ -82,6 +122,8 @@ if (xpCanvas && typeof Chart !== "undefined") {
                 y: {
                     beginAtZero: true,
 
+                    suggestedMax: 5,
+
                     grid: {
                         color:
                             "rgba(255, 255, 255, 0.055)",
@@ -89,6 +131,8 @@ if (xpCanvas && typeof Chart !== "undefined") {
 
                     ticks: {
                         color: "#7f8db7",
+                        precision: 0,
+                        stepSize: 1,
                     },
 
                     border: {
