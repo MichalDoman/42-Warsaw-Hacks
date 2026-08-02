@@ -107,4 +107,4 @@ The raw API data is converted into dataclass objects. This makes the data easier
 that every object has a clear structure.
 
 The service layer then filters and processes the data. Flask passes the final results to the dashboard, 
-which is displayed in a browser on the TV.
+ which is displayed in a browser on the TV.
