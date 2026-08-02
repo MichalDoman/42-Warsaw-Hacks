@@ -811,47 +811,206 @@
                             {% endfor %}
                         </article>
 
-                        <!-- RICHEST USERS -->
+                        <!-- ROTATING CAMPUS LEADERBOARD -->
                         <article
-                            class="
-                                panel
-                                glass-panel
-                                returning-panel
-                            "
+                            class="panel glass-panel leaderboard-panel"
+                            data-leaderboard
                         >
-                            <p class="eyebrow">
-                                WALLET SIGNALS
-                            </p>
-
-                            <h2>
-                                Top 3 richest students
-                            </h2>
-
-                            <div class="returning-list">
-                                {% for user
-                                    in dashboard.richest_users
-                                %}
-                                    <div class="returning-user">
-                                        <div class="small-avatar">
-                                            {{
-                                                user.login[0]
-                                                | upper
-                                            }}
-                                        </div>
-
-                                        <span>
-                                            {{ user.login }}
-                                        </span>
-
-                                        <strong>
-                                            {{ user.wallet }}
-                                        </strong>
-                                    </div>
-                                {% else %}
-                                    <p class="empty-message">
-                                        No wallet data available.
+                            <div class="leaderboard-header">
+                                <div>
+                                    <p
+                                        class="eyebrow"
+                                        data-leaderboard-eyebrow
+                                    >
+                                        WALLET SIGNALS
                                     </p>
-                                {% endfor %}
+
+                                    <h2 data-leaderboard-title>
+                                        Top 3 richest students
+                                    </h2>
+                                </div>
+
+                                <div
+                                    class="leaderboard-controls"
+                                    role="tablist"
+                                    aria-label="Leaderboard type"
+                                >
+                                    <button
+                                        class="
+                                            leaderboard-dot
+                                            leaderboard-dot-active
+                                        "
+                                        type="button"
+                                        data-leaderboard-button="0"
+                                        aria-label="Show richest students"
+                                        aria-selected="true"
+                                    ></button>
+
+                                    <button
+                                        class="leaderboard-dot"
+                                        type="button"
+                                        data-leaderboard-button="1"
+                                        aria-label="Show coalition leaders"
+                                        aria-selected="false"
+                                    ></button>
+
+                                    <button
+                                        class="leaderboard-dot"
+                                        type="button"
+                                        data-leaderboard-button="2"
+                                        aria-label="Show top evaluators"
+                                        aria-selected="false"
+                                    ></button>
+                                </div>
+                            </div>
+
+                            <div class="leaderboard-slides">
+
+                                <!-- TOP WALLETS -->
+                                <section
+                                    class="
+                                        leaderboard-slide
+                                        leaderboard-slide-active
+                                    "
+                                    data-leaderboard-slide="0"
+                                >
+                                    <div class="leaderboard-list">
+                                        {% for user in dashboard.richest_users %}
+                                            <div class="leaderboard-person">
+                                                <span class="leaderboard-rank">
+                                                    {{ loop.index }}
+                                                </span>
+
+                                                <div class="leaderboard-person-info">
+                                                    <strong>
+                                                        {{ user.login }}
+                                                    </strong>
+
+                                                    <span>
+                                                        Cosmic wealth explorer
+                                                    </span>
+                                                </div>
+
+                                                <div
+                                                    class="
+                                                        leaderboard-score
+                                                        wallet-score
+                                                    "
+                                                >
+                                                    {{ "{:,}".format(user.wallet) }}
+
+                                                    <small>₳</small>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <p class="empty-message">
+                                                No wallet signals available.
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+                                </section>
+
+                                <!-- COALITION LEADERS -->
+                                <section
+                                    class="leaderboard-slide"
+                                    data-leaderboard-slide="1"
+                                    hidden
+                                >
+                                    <div class="leaderboard-list">
+                                        {% for leader in dashboard.coalition_leaders %}
+                                            <div
+                                                class="
+                                                    leaderboard-person
+                                                    leader-coalition-{{
+                                                        leader.slug
+                                                    }}
+                                                "
+                                            >
+                                                <span class="leaderboard-rank">
+                                                    ✦
+                                                </span>
+
+                                                <div class="leaderboard-person-info">
+                                                    <strong>
+                                                        {{ leader.login }}
+                                                    </strong>
+
+                                                    <span>
+                                                        {{ leader.description }}
+                                                    </span>
+                                                </div>
+
+                                                <div
+                                                    class="
+                                                        coalition-leader-badge
+                                                        coalition-leader-{{
+                                                            leader.slug
+                                                        }}
+                                                    "
+                                                >
+                                                    {{ leader.coalition }}
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <p class="empty-message">
+                                                No coalition leaders available.
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+                                </section>
+
+                                <!-- TOP EVALUATORS -->
+                                <section
+                                    class="leaderboard-slide"
+                                    data-leaderboard-slide="2"
+                                    hidden
+                                >
+                                    <div class="leaderboard-list">
+                                        {% for evaluator in dashboard.top_evaluators %}
+                                            <div class="leaderboard-person">
+                                                <span class="leaderboard-rank">
+                                                    {{ loop.index }}
+                                                </span>
+
+                                                <div class="leaderboard-person-info">
+                                                    <strong>
+                                                        {{ evaluator.login }}
+                                                    </strong>
+
+                                                    <span>
+                                                        {{ evaluator.description }}
+                                                    </span>
+                                                </div>
+
+                                                <div
+                                                    class="
+                                                        leaderboard-score
+                                                        evaluator-score
+                                                    "
+                                                >
+                                                    {{ evaluator.evaluations }}
+
+                                                    <small>evals</small>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <p class="empty-message">
+                                                No evaluator signals available.
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+
+                                    <p class="leaderboard-mock-note">
+                                        Demo data for presentation purposes
+                                    </p>
+                                </section>
+                            </div>
+
+                            <div
+                                class="leaderboard-progress"
+                                aria-hidden="true"
+                            >
+                                <span data-leaderboard-progress></span>
                             </div>
                         </article>
                     </section>

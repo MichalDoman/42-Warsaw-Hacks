@@ -160,3 +160,160 @@ window.setTimeout(
     () => window.location.reload(),
     oneHour,
 );
+
+const leaderboard =
+    document.querySelector("[data-leaderboard]");
+
+if (leaderboard) {
+    const slides = Array.from(
+        leaderboard.querySelectorAll(
+            "[data-leaderboard-slide]",
+        ),
+    );
+
+    const buttons = Array.from(
+        leaderboard.querySelectorAll(
+            "[data-leaderboard-button]",
+        ),
+    );
+
+    const title = leaderboard.querySelector(
+        "[data-leaderboard-title]",
+    );
+
+    const eyebrow = leaderboard.querySelector(
+        "[data-leaderboard-eyebrow]",
+    );
+
+    const progress = leaderboard.querySelector(
+        "[data-leaderboard-progress]",
+    );
+
+    const leaderboardContent = [
+        {
+            eyebrow: "WALLET SIGNALS",
+            title: "Top 3 richest students",
+        },
+        {
+            eyebrow: "COALITION COMMAND",
+            title: "Leaders of every orbit",
+        },
+        {
+            eyebrow: "EVALUATION RADAR",
+            title: "Top 3 evaluators",
+        },
+    ];
+
+    let activeSlide = 0;
+    let rotationTimer = null;
+
+    const rotationDelay = 8000;
+
+    function restartProgressAnimation() {
+        if (!progress) {
+            return;
+        }
+
+        progress.style.animation = "none";
+
+        void progress.offsetWidth;
+
+        progress.style.animation = (
+            `leaderboard-progress-fill `
+            + `${rotationDelay}ms linear forwards`
+        );
+    }
+
+    function showLeaderboardSlide(index) {
+        activeSlide = index;
+
+        slides.forEach((slide, slideIndex) => {
+            const isActive = slideIndex === index;
+
+            slide.hidden = !isActive;
+
+            slide.classList.toggle(
+                "leaderboard-slide-active",
+                isActive,
+            );
+        });
+
+        buttons.forEach((button, buttonIndex) => {
+            const isActive = buttonIndex === index;
+
+            button.classList.toggle(
+                "leaderboard-dot-active",
+                isActive,
+            );
+
+            button.setAttribute(
+                "aria-selected",
+                String(isActive),
+            );
+        });
+
+        const content = leaderboardContent[index];
+
+        if (title && content) {
+            title.textContent = content.title;
+        }
+
+        if (eyebrow && content) {
+            eyebrow.textContent = content.eyebrow;
+        }
+
+        restartProgressAnimation();
+    }
+
+    function startLeaderboardRotation() {
+        window.clearInterval(rotationTimer);
+
+        rotationTimer = window.setInterval(
+            () => {
+                const nextSlide =
+                    (activeSlide + 1) % slides.length;
+
+                showLeaderboardSlide(nextSlide);
+            },
+            rotationDelay,
+        );
+    }
+
+    buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const selectedSlide = Number(
+                button.dataset.leaderboardButton,
+            );
+
+            showLeaderboardSlide(selectedSlide);
+            startLeaderboardRotation();
+        });
+    });
+
+    leaderboard.addEventListener(
+        "mouseenter",
+        () => {
+            window.clearInterval(rotationTimer);
+
+            if (progress) {
+                progress.style.animationPlayState =
+                    "paused";
+            }
+        },
+    );
+
+    leaderboard.addEventListener(
+        "mouseleave",
+        () => {
+            if (progress) {
+                progress.style.animationPlayState =
+                    "running";
+            }
+
+            startLeaderboardRotation();
+        },
+    );
+
+    showLeaderboardSlide(0);
+    startLeaderboardRotation();
+}

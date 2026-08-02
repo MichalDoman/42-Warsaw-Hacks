@@ -195,6 +195,45 @@ def _load_dashboard_data() -> dict[str, Any]:
         coalition_metrics=coalition_metrics,
     )
 
+    coalition_leaders = [
+        {
+            "login": "mmelnyk",
+            "coalition": "Orionis",
+            "description": "Commander of the solar fleet",
+            "slug": "orionis",
+        },
+        {
+            "login": "lwillis",
+            "coalition": "Uniterrax",
+            "description": "Navigator of the golden alliance",
+            "slug": "uniterrax",
+        },
+        {
+            "login": "faikhan",
+            "coalition": "Lunaria",
+            "description": "Guardian of the lunar orbit",
+            "slug": "lunaria",
+        },
+    ]
+
+    top_evaluators = [
+        {
+            "login": "skolsut",
+            "evaluations": 18,
+            "description": "Master of precise feedback",
+        },
+        {
+            "login": "ndemkiv",
+            "evaluations": 15,
+            "description": "Guardian of clean code",
+        },
+        {
+            "login": "pczajkow",
+            "evaluations": 12,
+            "description": "Explorer of hidden bugs",
+        },
+    ]
+
     return {
         "coalition_counts": coalition_counts,
         "leading_coalition": (
@@ -219,6 +258,8 @@ def _load_dashboard_data() -> dict[str, Any]:
             }
             for user in richest_users
         ],
+        "coalition_leaders": coalition_leaders,
+        "top_evaluators": top_evaluators,
         "projects": get_latest_projects_data(
             projects=all_projects,
             users=all_users,
