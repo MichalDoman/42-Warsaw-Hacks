@@ -446,47 +446,108 @@
                                 </div>
                             </section>
 
-                            <!-- EVALUATIONS -->
-                            <section class="signal-item">
-                                <div class="signal-icon violet">
-                                    ☄
-                                </div>
+                            <!-- FIRST SUNRAY -->
+                            <section class="signal-item first-sunray-card">
+                                {% if dashboard.first_sunray %}
+                                    <div class="first-sunray-visual">
+                                        <span
+                                            class="sunray-glow"
+                                            aria-hidden="true"
+                                        ></span>
 
-                                <div>
-                                    <p class="signal-label">
-                                        Evaluation wave
-                                    </p>
+                                        <span
+                                            class="sunray-core"
+                                            aria-hidden="true"
+                                        ></span>
 
-                                    <p class="signal-value">
-                                        {{
-                                            dashboard
-                                            .evaluation_count
-                                        }}
-                                        evaluations completed today
-                                    </p>
-                                </div>
-                            </section>
+                                        <span
+                                            class="sunray-beam sunray-beam-one"
+                                            aria-hidden="true"
+                                        ></span>
 
-                            <!-- TOP PROJECT -->
-                            <section class="signal-item">
-                                <div class="signal-icon orange">
-                                    ✦
-                                </div>
+                                        <span
+                                            class="sunray-beam sunray-beam-two"
+                                            aria-hidden="true"
+                                        ></span>
 
-                                <div>
-                                    <p class="signal-label">
-                                        Cosmic science research
-                                    </p>
+                                        <span
+                                            class="sunray-beam sunray-beam-three"
+                                            aria-hidden="true"
+                                        ></span>
 
-                                    <p class="signal-value">
-                                        <strong>
-                                            {{ dashboard.top_project }}
-                                        </strong>
+                                        <span
+                                            class="sunray-orbit"
+                                            aria-hidden="true"
+                                        ></span>
 
-                                        is currently the most active
-                                        project
-                                    </p>
-                                </div>
+                                        <img
+                                            class="first-sunray-avatar"
+                                            src="{{ dashboard.first_sunray.img_link }}"
+                                            alt="{{ dashboard.first_sunray.login }}"
+                                        >
+
+                                        <span
+                                            class="sunray-star"
+                                            aria-hidden="true"
+                                        >
+                                            ✦
+                                        </span>
+                                    </div>
+
+                                    <div class="first-sunray-content">
+                                        <p class="first-sunray-label">
+                                            THE FIRST SUNRAY!
+                                        </p>
+
+                                        <div class="first-sunray-heading">
+                                            <h3>
+                                                {{ dashboard.first_sunray.login }}
+                                            </h3>
+
+                                            <time
+                                                class="first-sunray-time"
+                                                datetime="{{ dashboard.first_sunray.time }}"
+                                            >
+                                                {{ dashboard.first_sunray.time }}
+                                            </time>
+                                        </div>
+
+                                        <p class="first-sunray-message">
+                                            First signal after sunrise
+                                        </p>
+
+                                        {% if dashboard.first_sunray.location %}
+                                            <p class="first-sunray-terminal">
+                                                Terminal
+
+                                                <strong>
+                                                    {{ dashboard.first_sunray.location }}
+                                                </strong>
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <div
+                                        class="first-sunray-empty"
+                                        aria-hidden="true"
+                                    >
+                                        ☀
+                                    </div>
+
+                                    <div class="first-sunray-content">
+                                        <p class="first-sunray-label">
+                                            THE FIRST SUNRAY!
+                                        </p>
+
+                                        <h3>
+                                            Waiting for sunrise
+                                        </h3>
+
+                                        <p class="first-sunray-message">
+                                            No signals received after 05:30 yet.
+                                        </p>
+                                    </div>
+                                {% endif %}
                             </section>
 
                             <!-- CAMPUS ACTIVITY -->

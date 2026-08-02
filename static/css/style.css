@@ -1211,11 +1211,315 @@ button { font: inherit; }
     }
 }
 
+.first-sunray-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 166px;
+    overflow: hidden;
+    padding: 22px;
+    border-color: rgba(255, 190, 74, 0.34);
+    background:
+        radial-gradient(
+            circle at 12% 48%,
+            rgba(255, 211, 91, 0.23),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 90% 0%,
+            rgba(255, 135, 65, 0.14),
+            transparent 36%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(114, 67, 27, 0.28),
+            rgba(32, 25, 53, 0.76)
+        );
+    box-shadow:
+        inset 0 0 30px rgba(255, 181, 71, 0.07),
+        0 0 24px rgba(255, 176, 71, 0.05);
+}
+
+.first-sunray-card::after {
+    content: "";
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    right: -93px;
+    top: -104px;
+    border: 1px solid rgba(255, 215, 114, 0.18);
+    border-radius: 50%;
+    box-shadow:
+        0 0 38px rgba(255, 185, 72, 0.12);
+}
+
+.first-sunray-visual {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 98px;
+    height: 98px;
+}
+
+.first-sunray-avatar {
+    position: relative;
+    z-index: 6;
+    width: 62px;
+    height: 62px;
+    border: 3px solid rgba(255, 237, 176, 0.95);
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow:
+        0 0 12px rgba(255, 241, 177, 0.95),
+        0 0 29px rgba(255, 190, 65, 0.68);
+}
+
+.sunray-core {
+    position: absolute;
+    z-index: 3;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 252, 218, 0.96),
+            rgba(255, 216, 77, 0.55) 48%,
+            rgba(255, 151, 63, 0.18) 70%,
+            transparent 74%
+        );
+    animation:
+        sunray-pulse 2.4s ease-in-out infinite;
+}
+
+.sunray-glow {
+    position: absolute;
+    z-index: 1;
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 220, 102, 0.34),
+            rgba(255, 158, 67, 0.13) 48%,
+            transparent 72%
+        );
+    filter: blur(4px);
+    animation:
+        sunray-glow 2.4s ease-in-out infinite;
+}
+
+.sunray-orbit {
+    position: absolute;
+    z-index: 5;
+    width: 95px;
+    height: 36px;
+    border: 1px solid rgba(255, 234, 171, 0.6);
+    border-radius: 50%;
+    transform: rotate(-21deg);
+    animation:
+        sunray-orbit 9s linear infinite;
+}
+
+.sunray-orbit::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    width: 7px;
+    height: 7px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background: #fff7c7;
+    box-shadow:
+        0 0 8px #ffffff,
+        0 0 16px rgba(255, 216, 77, 0.95);
+}
+
+.sunray-beam {
+    position: absolute;
+    z-index: 2;
+    width: 2px;
+    height: 94px;
+    border-radius: 999px;
+    background:
+        linear-gradient(
+            to bottom,
+            transparent,
+            rgba(255, 226, 122, 0.8),
+            transparent
+        );
+    transform-origin: center;
+}
+
+.sunray-beam-one {
+    transform: rotate(0deg);
+}
+
+.sunray-beam-two {
+    transform: rotate(60deg);
+}
+
+.sunray-beam-three {
+    transform: rotate(120deg);
+}
+
+.sunray-star {
+    position: absolute;
+    z-index: 7;
+    top: 1px;
+    right: 3px;
+    color: #fff2a6;
+    font-size: 18px;
+    text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.96),
+        0 0 18px rgba(255, 209, 79, 0.92);
+    animation:
+        sunray-star-twinkle 1.7s ease-in-out infinite;
+}
+
+.first-sunray-content {
+    position: relative;
+    z-index: 4;
+    min-width: 0;
+    flex: 1;
+}
+
+.first-sunray-label {
+    margin: 0 0 6px;
+    color: #ffd36a;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+}
+
+.first-sunray-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.first-sunray-heading h3,
+.first-sunray-content > h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 900;
+    text-shadow:
+        0 0 14px rgba(255, 197, 79, 0.38);
+}
+
+.first-sunray-time {
+    flex: 0 0 auto;
+    padding: 6px 11px;
+    border: 1px solid rgba(255, 215, 96, 0.4);
+    border-radius: 999px;
+    color: #fff3bc;
+    background:
+        rgba(255, 190, 69, 0.1);
+    box-shadow:
+        0 0 14px rgba(255, 188, 66, 0.13);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.first-sunray-message {
+    margin: 9px 0 0;
+    color: #e8d9bd;
+    font-size: 13px;
+}
+
+.first-sunray-terminal {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.first-sunray-terminal strong {
+    color: #ffe29a;
+}
+
+.first-sunray-empty {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 70px;
+    height: 70px;
+    border: 1px solid rgba(255, 213, 102, 0.36);
+    border-radius: 50%;
+    color: #ffd84d;
+    background:
+        rgba(255, 195, 76, 0.08);
+    box-shadow:
+        0 0 26px rgba(255, 185, 68, 0.16);
+    font-size: 34px;
+}
+
+@keyframes sunray-pulse {
+    0%,
+    100% {
+        opacity: 0.76;
+        transform: scale(0.94);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+}
+
+@keyframes sunray-glow {
+    0%,
+    100% {
+        opacity: 0.65;
+        transform: scale(0.92);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.13);
+    }
+}
+
+@keyframes sunray-orbit {
+    from {
+        transform: rotate(-21deg);
+    }
+
+    to {
+        transform: rotate(339deg);
+    }
+}
+
+@keyframes sunray-star-twinkle {
+    0%,
+    100% {
+        opacity: 0.45;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.25);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .animated-star,
     .first-orbit,
     .second-orbit,
-    .first-star-empty-icon {
+    .first-star-empty-icon,
+    .sunray-core,
+    .sunray-glow,
+    .sunray-orbit,
+    .sunray-star {
         animation: none;
     }
 }

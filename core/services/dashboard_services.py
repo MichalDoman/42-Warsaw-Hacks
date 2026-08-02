@@ -26,6 +26,7 @@ from core.services.projects_stats import (
     get_mission_streak,
 )
 from core.services.users_stats import (
+    get_first_login_after_sunrise,
     get_first_login_today,
     get_top_3_richest_users,
 )
@@ -158,6 +159,11 @@ def _load_dashboard_data() -> dict[str, Any]:
         users=all_users,
     )
 
+    first_sunray = get_first_login_after_sunrise(
+        locations=today_locations,
+        users=all_users,
+    )
+
     all_projects = create_projects_for_warsaw_users(
         users=all_users,
         access_token=access_token,
@@ -196,6 +202,7 @@ def _load_dashboard_data() -> dict[str, Any]:
         "leading_count": leading_count,
         "total_logged_in": total_logged_in,
         "first_login": first_login,
+        "first_sunray": first_sunray,
         "mission_streak": mission_streak,
         "hourly_login_activity": hourly_login_activity,
         "hour_labels": build_hour_labels(),
