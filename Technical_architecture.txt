@@ -1,0 +1,110 @@
+## Technical solution
+
+### What is it?
+
+The solution is a web dashboard for 42 Warsaw. The dashboard presents following statistics:
+Left column — Campus Signals:
+
+Leading Coalition — the coalition with the most students logged in today, plus the total number of "explorers" for the day
+The First Star — the first student to log in on campus today (login, avatar, time, location)
+Mission Streak — the current campus-wide streak of consecutively validated projects
+The First Sunray — the first student to log in after 05:30 (separate from the overall "first" login)
+Rocket Fuel — combined wallet balance of all unique students who logged in today
+
+Center column:
+
+Projects completed this week — the 5 most recent completed/graded projects (avatar, login, project name)
+Peak Orbit — the hour of the day with the highest login activity today, plus an hourly activity chart
+Coalition Presence — distribution of today's active students across coalitions (Orionis, Lunaria, Uniterrax) as progress bars
+Rotating Campus Leaderboard — a card that cycles through three rankings:
+	Top 3 richest students (wallet)
+	Coalition leaders (mock data — placeholder for the demo)
+	Top evaluators (mock data — placeholder for the demo)
+
+Right column — Orbital Intelligence:
+
+Coalition statistics — per-coalition cards: active students, average score, top-3/top-10 scores, total coalition score
+The dashboard gets data from the 42 API, processes it in Python and displays it in a browser.
+
+### How to use it?
+
+The user starts the application with:
+
+```
+uv run main.py
+```
+
+Then the dashboard is available in the browser at:
+
+```text
+http://localhost:5000
+```
+
+The page can refresh automatically or with a refresh button.
+
+### JSON Dashboard data
+
+The processed dashboard data is also available as JSON at:
+
+```text
+http://localhost:5000/api/dashboard
+```
+
+This endpoint returns the same data that is used to build the dashboard, including coalition statistics, 
+recent projects, login activity and student rankings.
+It can be used for testing, debugging or connecting another frontend to the application.
+
+
+### Deployment target
+
+The application can run on a computer or mini PC connected to the TV.
+
+The device only needs:
+
+* Python
+* internet access
+* access to the 42 API
+* a web browser
+
+### Display on TV
+
+The computer is connected to the TV with HDMI.
+
+The dashboard is opened in a browser in full-screen mode. This allows the TV to display the dashboard continuously without 
+browser menus.
+
+### Technology stack
+
+* Python — data processing
+* Flask — backend server
+* Jinja — generating the web page
+* HTML and CSS — dashboard layout
+* JavaScript — refresh and simple animations
+* Chart.js — charts
+* 42 API — source of data
+
+This stack is simple, lightweight and easy to deploy.
+
+### Architecture and data flow
+
+The application is divided into a few simple parts:
+
+* **API client** — downloads data from the 42 API.
+* **Python Dataclasses** — store data in a clear structure (`User`, `Location`, `Project` and `Coalition`).
+* **Services** — filter the data and calculate dashboard statistics.
+* **Flask backend** — sends prepared data to the dashboard and JSON API.
+* **Browser** — displays the dashboard on the TV screen.
+
+The data flow is:
+
+```text
+42 API → API client → Dataclasses → Services → Flask → TV dashboard
+```
+
+First, the application gets an access token and downloads data from the 42 API.
+
+The raw API data is converted into dataclass objects. This makes the data easier to use and ensures 
+that every object has a clear structure.
+
+The service layer then filters and processes the data. Flask passes the final results to the dashboard, 
+which is displayed in a browser on the TV.
